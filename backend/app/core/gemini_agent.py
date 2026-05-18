@@ -498,8 +498,30 @@ async def generate_nudge_fc(context: dict, db, user_id: int) -> dict:
 # ---------------------------------------------------------------------------
 async def chat_with_gemini(message: str, db, user_id: int) -> str:
     """Free-form chat with Gemini using Function Calling."""
+    from app.db.models import User, FixedExpense, Transaction
+    from sqlalchemy import func
+
+    user = db.get(User, user_id)
+    monthly_salary = user.monthly_salary if user else 0.0
+    fixed_total = db.query(func.sum(FixedExpense.amount)).filter(FixedExpense.user_id == user_id).scalar() or 0.0
+    
+    # Calculate total discretionary spending in the last 30 days
+    cutoff = datetime.utcnow() - timedelta(days=30)
+    spent_30 = db.query(func.sum(Transaction.amount)).filter(
+        Transaction.user_id == user_id,
+        Transaction.occurred_at >= cutoff,
+        Transaction.spending_type == "discretionary"
+    ).scalar() or 0.0
+    
+    remaining = max(monthly_salary - fixed_total - spent_30, 0.0)
+
+    context = {
+        "remaining_budget": remaining,
+        "monthly_salary": monthly_salary
+    }
+
     if not settings.gemini_enabled:
-        return _mock_chat(message, {"remaining_budget": 0, "monthly_salary": 0})
+        return _mock_chat(message, context)
 
     try:
         import google.generativeai as genai
@@ -549,7 +571,7 @@ async def chat_with_gemini(message: str, db, user_id: int) -> str:
 
     except Exception as exc:
         log.warning("Gemini chat failed (%s); mock response", exc)
-        return _mock_chat(message, {"remaining_budget": 0, "monthly_salary": 0})
+        return _mock_chat(message, context)
 
 
 # ---------------------------------------------------------------------------

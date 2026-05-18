@@ -24,6 +24,7 @@ export default function Onboarding() {
 
   // Step 1
   const [salary, setSalary] = useState('');
+  const [age, setAge] = useState('30');
 
   // Step 2
   const [expenses, setExpenses] = useState([{ name: '', amount: '', category: 'housing', due_day: '1' }]);
@@ -73,6 +74,7 @@ export default function Onboarding() {
 
       await completeOnboarding({
         monthly_salary: parseFloat(salary),
+        age: parseInt(age) || 30,
         fixed_expenses,
         goals,
         risk_profile: riskProfile || 'moderate'
@@ -114,21 +116,37 @@ export default function Onboarding() {
               </div>
             )}
 
-            {/* STEP 1: SALARY */}
+            {/* STEP 1: SALARY & AGE */}
             {step === 1 && (
               <div className="animate-fade-in max-w-xl mx-auto text-center py-8">
-                <h2 className="text-3xl font-bold mb-4">Aylık Gelirin Nedir?</h2>
-                <p className="text-gray-400 mb-8">AI asistanın, harcamalarını daha iyi analiz edebilmesi için aylık net maaşını bilmesi gerekiyor.</p>
+                <h2 className="text-3xl font-bold mb-4">Aylık Gelirin ve Yaşın Nedir?</h2>
+                <p className="text-gray-400 mb-8">AI asistanın, harcamalarını ve davranışsal finans risklerini tam analiz edebilmesi için bu bilgileri kullanacaktır.</p>
                 
-                <div className="relative max-w-xs mx-auto">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400">₺</span>
-                  <input
-                    type="number"
-                    value={salary}
-                    onChange={e => setSalary(e.target.value)}
-                    placeholder="50000"
-                    className="w-full bg-gray-700 text-white text-3xl font-bold py-4 pl-12 pr-4 rounded-xl focus:ring-4 focus:ring-purple-500/50 outline-none transition"
-                  />
+                <div className="space-y-6 max-w-xs mx-auto">
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2 font-medium text-left">Aylık Net Maaş (₺)</label>
+                    <div className="relative">
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-400">₺</span>
+                      <input
+                        type="number"
+                        value={salary}
+                        onChange={e => setSalary(e.target.value)}
+                        placeholder="50000"
+                        className="w-full bg-gray-700 text-white text-3xl font-bold py-4 pl-12 pr-4 rounded-xl focus:ring-4 focus:ring-purple-500/50 outline-none transition"
+                      />
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm text-gray-400 mb-2 font-medium text-left">Yaşınız</label>
+                    <input
+                      type="number"
+                      value={age}
+                      onChange={e => setAge(e.target.value)}
+                      placeholder="30"
+                      className="w-full bg-gray-700 text-white text-3xl font-bold py-4 px-4 rounded-xl focus:ring-4 focus:ring-purple-500/50 outline-none transition"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -322,7 +340,7 @@ export default function Onboarding() {
               <button
                 onClick={() => setStep(step + 1)}
                 disabled={
-                  (step === 1 && !salary) ||
+                  (step === 1 && (!salary || !age)) ||
                   (step === 3 && (!selectedGoalCat || !goalTitle || !goalAmount))
                 }
                 className="flex items-center gap-2 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 disabled:hover:bg-purple-600 text-white px-8 py-3 rounded-lg font-bold transition"

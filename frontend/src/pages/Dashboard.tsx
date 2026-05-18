@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { 
-  getSpendingBreakdown, getNudgeSuccess, getGoalProgress, getTimeRisk 
+  getSpendingBreakdown, getNudgeSuccess, getGoalProgress, getTimeRisk, updateProfile
 } from '../services/api';
 import { 
   PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, BarChart, Bar, RadialBarChart, RadialBar 
@@ -11,6 +11,8 @@ import { useNavigate } from 'react-router-dom';
 export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [isEditingSalary, setIsEditingSalary] = useState(false);
+  const [newSalary, setNewSalary] = useState('');
   
   const [breakdown, setBreakdown] = useState<any>(null);
   const [nudgeSuccess, setNudgeSuccess] = useState<any[]>([]);
@@ -49,6 +51,20 @@ export default function Dashboard() {
     return <div className="text-gray-400 p-8 flex items-center justify-center h-full">Veriler analiz ediliyor...</div>;
   }
 
+  const handleUpdateSalary = async () => {
+    try {
+      const val = parseFloat(newSalary);
+      if (val > 0) {
+        await updateProfile({ monthly_salary: val });
+        const updatedUser = { ...user, monthly_salary: val };
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        window.location.reload();
+      }
+    } catch (err) {
+      alert("Maaş güncellenirken bir hata oluştu.");
+    }
+  };
+
   // --- Chart Data Formatting ---
   
   // 1. Pie Chart (Essential vs Discretionary)
@@ -65,6 +81,9 @@ export default function Dashboard() {
     { name: 'İlerleme', value: goalPct, fill: '#a855f7' },
   ] : [];
 
+  const totalSpent = (breakdown?.essential_total || 0) + (breakdown?.discretionary_total || 0);
+  const budgetUsagePercent = user.monthly_salary > 0 ? Math.round((totalSpent / user.monthly_salary) * 100) : 0;
+
   return (
     <div className="space-y-6">
       {error && (
@@ -74,25 +93,44 @@ export default function Dashboard() {
       )}
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
-        <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-lg">
-          <p className="text-gray-400 text-sm mb-1">Aylık Net Gelir</p>
-          <p className="text-3xl font-bold text-white">₺{(user.monthly_salary || 0).toLocaleString()}</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-4">
+        <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-lg relative group">
+          <p className="text-gray-400 text-sm mb-1 flex justify-between items-center">
+            Aylık Net Gelir
+            <button onClick={() => {setIsEditingSalary(!isEditingSalary); setNewSalary(String(user.monthly_salary || ''));}} className="text-xs text-purple-400 hover:text-purple-300 opacity-0 group-hover:opacity-100 transition">Düzenle</button>
+          </p>
+          {isEditingSalary ? (
+            <div className="flex gap-2 mt-2">
+              <input type="number" value={newSalary} onChange={(e) => setNewSalary(e.target.value)} className="w-full bg-gray-900 border border-gray-600 text-white px-2 py-1 rounded outline-none" />
+              <button onClick={handleUpdateSalary} className="bg-purple-600 hover:bg-purple-500 text-white px-3 rounded text-sm">Kaydet</button>
+            </div>
+          ) : (
+            <p className="text-3xl font-bold text-white">₺{(user.monthly_salary || 0).toLocaleString()}</p>
+          )}
         </div>
         <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-lg">
-          <p className="text-gray-400 text-sm mb-1">Kalan Bütçe (Kullanılabilir)</p>
+          <p className="text-gray-400 text-sm mb-1">Kalan Bütçe</p>
           <p className="text-3xl font-bold text-purple-400">
-            ₺{((user.monthly_salary || 0) - (breakdown?.essential_total || 0) - (breakdown?.discretionary_total || 0)).toLocaleString()}
+            ₺{((user.monthly_salary || 0) - totalSpent).toLocaleString()}
           </p>
         </div>
         <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-lg">
           <p className="text-gray-400 text-sm mb-1">Bu Ay Harcanan</p>
           <p className="text-3xl font-bold text-red-400">
-            ₺{((breakdown?.essential_total || 0) + (breakdown?.discretionary_total || 0)).toLocaleString()}
+            ₺{totalSpent.toLocaleString()}
           </p>
         </div>
         <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-lg">
-          <p className="text-gray-400 text-sm mb-1">Nudge ile Tasarruf (Toplam)</p>
+          <p className="text-gray-400 text-sm mb-1">Bütçe Kullanım Skoru</p>
+          <p className={`text-3xl font-bold ${budgetUsagePercent > 80 ? 'text-red-400' : 'text-green-400'}`}>
+            %{budgetUsagePercent}
+          </p>
+          <div className="w-full bg-gray-700 rounded-full h-1.5 mt-2">
+            <div className={`h-1.5 rounded-full ${budgetUsagePercent > 80 ? 'bg-red-500' : budgetUsagePercent > 50 ? 'bg-yellow-500' : 'bg-green-500'}`} style={{ width: `${Math.min(budgetUsagePercent, 100)}%` }} />
+          </div>
+        </div>
+        <div className="bg-gray-800 p-6 rounded-2xl border border-gray-700 shadow-lg">
+          <p className="text-gray-400 text-sm mb-1">Nudge Tasarrufu</p>
           <p className="text-3xl font-bold text-green-400">
             ₺{nudgeSuccess.reduce((acc, curr) => acc + curr.saved_amount, 0).toLocaleString()}
           </p>

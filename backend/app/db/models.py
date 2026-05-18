@@ -24,6 +24,7 @@ class User(Base):
     financial_scenario: Mapped[str] = mapped_column(String(32), default="normal")
     onboarding_completed: Mapped[bool] = mapped_column(Boolean, default=False)
     risk_profile: Mapped[str] = mapped_column(String(32), default="moderate")  # saver, moderate, spender
+    age: Mapped[int] = mapped_column(Integer, default=30)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=_utcnow)
 
     transactions: Mapped[list["Transaction"]] = relationship(back_populates="user", cascade="all, delete-orphan")

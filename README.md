@@ -63,6 +63,19 @@ Geleneksel bütçe uygulamaları **geçmişe dönük** raporlar sunar. MindfulSp
 | **Veritabanı** | SQLite (dev) / PostgreSQL (prod-ready via DATABASE_URL) |
 | **DevOps** | Docker, Docker Compose, GitHub Actions, pytest |
 
+### ✨ Son Eklenen Üretim (Production-Ready) Özellikleri
+
+Hackathon 2026 sunumu ve jüri değerlendirmesi için sisteme eklenen son teknolojik katmanlar:
+
+1. **Canlı Gemini Chat Asistanı (✨):** 
+   Sağ altta yüzen parıltı butonuyla açılan interaktif sohbet robotu. Gemini API'nin **Function Calling** (Fonksiyon Çağırma) gücünü kullanarak kullanıcının bütçesini, hedeflerini ve harcamalarını sorgulayan 4 araca (`get_user_budget`, `get_user_goals`, `get_recent_transactions`, `calculate_goal_impact`) doğrudan erişir. API anahtarı girilmediğinde dahi gerçek verilerle konuşmaya devam eden akıllı **Dynamic Mock Fallback** desteği mevcuttur.
+2. **RFM Analytics Zaman Serisi:**
+   Haftalık bazda kaydedilen RFM snapshot verilerini `/rfm/{user_id}/history` API'sinden çekerek Recharts yardımıyla görselleştiren yeni analitik ekranı. Kullanıcının risk profilinin zaman içindeki seyrini **Alan (Area)** ve **Çizgi (Line)** grafikleriyle longitudinal (boylamsal) olarak takip eder.
+3. **Tam Dinamik ML Veri Entegrasyonu:**
+   XGBoost modeline beslenen statik `"age": 30` girdileri tamamen kaldırılmıştır. `models.py`'da yapılan veritabanı göçüyle `User` modeline `age` (Yaş) alanı eklenmiş; bu alan **Onboarding** ve **Profili Düzenle Modalı** ile ön yüzden dinamik alınarak doğrudan ML modeline bağlanmıştır.
+4. **2 Aylık Zengin Simülasyon Seeding:**
+   Jürinin sistemi boş görmemesi için `seed_test_user.py` scripti ile `test.jury@mindfulspend.ai` (Şifre: `JuryTest123!`) hesabına 63 işlem, 9 haftalık RFM snapshot serisi, 2 aktif finansal hedef, yaklaşan sabit faturalar ve **25 adet tarihsel Nudge logu** eklenmiştir.
+
 ## Hızlı Başlangıç
 
 ### Önkoşullar

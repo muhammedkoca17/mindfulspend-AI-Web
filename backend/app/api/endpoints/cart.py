@@ -135,7 +135,7 @@ def _build_cart_features(cart: Cart, user: User, db: Session) -> dict:
         "f_score": rfm.f_score,
         "m_score": rfm.m_score,
         "rfm_score": rfm.rfm_risk,
-        "age": 30,
+        "age": getattr(user, 'age', 30) or 30,
         "quantity": qty,
         "price": total / max(qty, 1),
         "amount_try": total,

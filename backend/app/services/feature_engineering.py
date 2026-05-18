@@ -152,7 +152,7 @@ def build_realtime_features(cart_items, user, db) -> dict:
         "f_score": rfm.f_score,
         "m_score": rfm.m_score,
         "rfm_score": rfm.rfm_risk,
-        "age": 30,
+        "age": getattr(user, 'age', 30) or 30,
         "quantity": qty,
         "price": round(price_avg, 2),
         "amount_try": round(total, 2),

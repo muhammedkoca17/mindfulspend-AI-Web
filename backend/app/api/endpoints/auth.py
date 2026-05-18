@@ -89,6 +89,7 @@ def _user_to_dict(user: User) -> dict:
         "monthly_salary": user.monthly_salary,
         "onboarding_completed": user.onboarding_completed,
         "risk_profile": user.risk_profile,
+        "age": user.age,
     }
 
 
@@ -153,6 +154,7 @@ class UserUpdate(BaseModel):
     monthly_salary: float | None = None
     full_name: str | None = None
     risk_profile: str | None = None
+    age: int | None = None
 
 @router.patch("/me")
 def update_me(
@@ -160,13 +162,15 @@ def update_me(
     db: Session = Depends(get_db),
     user: User = Depends(get_current_user),
 ):
-    """Update current user's profile (salary, name, risk_profile)."""
+    """Update current user's profile (salary, name, risk_profile, age)."""
     if data.monthly_salary is not None:
         user.monthly_salary = data.monthly_salary
     if data.full_name is not None:
         user.full_name = data.full_name
     if data.risk_profile is not None:
         user.risk_profile = data.risk_profile
+    if data.age is not None:
+        user.age = data.age
     db.commit()
     db.refresh(user)
     # Update localStorage mirror

@@ -35,6 +35,10 @@ export default function Profile() {
   const [salaryInput, setSalaryInput] = useState('');
   const [salaryLoading, setSalaryLoading] = useState(false);
 
+  // Profile edit modal state
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [profileData, setProfileData] = useState({ full_name: '', risk_profile: 'moderate', age: '' });
+
   useEffect(() => {
     // Fetch fresh user data from backend
     getMe().then(res => {
@@ -60,6 +64,21 @@ export default function Profile() {
       alert('Maaş güncellenemedi.');
     } finally {
       setSalaryLoading(false);
+    }
+  };
+
+  const handleProfileSave = async () => {
+    try {
+      const res = await updateProfile({
+        full_name: profileData.full_name,
+        risk_profile: profileData.risk_profile,
+        age: parseInt(profileData.age) || 30
+      });
+      setUser(res.data);
+      localStorage.setItem('user', JSON.stringify(res.data));
+      setShowProfileModal(false);
+    } catch {
+      alert('Profil güncellenemedi.');
     }
   };
 
@@ -142,11 +161,31 @@ export default function Profile() {
         </div>
         
         <div className="z-10 flex-1 text-center md:text-left">
-          <h1 className="text-4xl font-bold text-white mb-2">{user.full_name || 'Kullanıcı'}</h1>
-          <p className="text-gray-400 text-lg mb-4">{user.email || 'Email adresi bulunamadı'}</p>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-4xl font-bold text-white mb-2">{user.full_name || 'Kullanıcı'}</h1>
+              <p className="text-gray-400 text-lg mb-4">{user.email || 'Email adresi bulunamadı'}</p>
+            </div>
+            <button
+              onClick={() => {
+                setProfileData({
+                  full_name: user.full_name || '',
+                  risk_profile: user.risk_profile || 'moderate',
+                  age: String(user.age || '30')
+                });
+                setShowProfileModal(true);
+              }}
+              className="bg-purple-600 hover:bg-purple-500 text-white px-5 py-2 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2 self-center md:self-start border border-purple-500 shadow-lg shadow-purple-500/20"
+            >
+              <Edit3 size={16} /> Profili Düzenle
+            </button>
+          </div>
           <div className="flex flex-wrap justify-center md:justify-start gap-4">
             <span className="bg-gray-900 px-4 py-2 rounded-full text-sm font-medium border border-gray-700 text-gray-300">
               Risk Profili: {user.risk_profile ? String(user.risk_profile).toUpperCase() : 'BİLİNMİYOR'}
+            </span>
+            <span className="bg-gray-900 px-4 py-2 rounded-full text-sm font-medium border border-gray-700 text-gray-300">
+              Yaş: {user.age || '30'}
             </span>
           </div>
         </div>
@@ -385,6 +424,64 @@ export default function Profile() {
                 className="w-full py-4 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-xl font-bold text-lg transition shadow-lg shadow-purple-500/20"
               >
                 {saving ? 'Kaydediliyor...' : (editingId ? 'Güncelle' : 'Ekle')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Profile Modal */}
+      {showProfileModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-white">Profil Bilgilerini Düzenle</h3>
+              <button onClick={() => setShowProfileModal(false)} className="text-gray-500 hover:text-white transition">
+                <X size={24} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-5">
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">Ad Soyad</label>
+                <input
+                  type="text"
+                  value={profileData.full_name}
+                  onChange={e => setProfileData({...profileData, full_name: e.target.value})}
+                  placeholder="Ad Soyad"
+                  className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">Yaş</label>
+                <input
+                  type="number"
+                  value={profileData.age}
+                  onChange={e => setProfileData({...profileData, age: e.target.value})}
+                  placeholder="Örn: 30"
+                  className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">Risk Profili</label>
+                <select
+                  value={profileData.risk_profile}
+                  onChange={e => setProfileData({...profileData, risk_profile: e.target.value})}
+                  className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                >
+                  <option value="saver">Tasarrufçu (Saver)</option>
+                  <option value="moderate">Dengeli (Moderate)</option>
+                  <option value="spender">Harcamacı (Spender)</option>
+                </select>
+              </div>
+
+              <button
+                onClick={handleProfileSave}
+                className="w-full py-4 bg-purple-600 hover:bg-purple-500 text-white rounded-xl font-bold text-lg transition shadow-lg shadow-purple-500/20"
+              >
+                Kaydet
               </button>
             </div>
           </div>

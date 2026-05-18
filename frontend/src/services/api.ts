@@ -23,7 +23,7 @@ export const login = (email: string, password: string) =>
 
 export const getMe = () => api.get('/auth/me');
 
-export const updateProfile = (data: { monthly_salary?: number; full_name?: string; risk_profile?: string }) =>
+export const updateProfile = (data: { monthly_salary?: number; full_name?: string; risk_profile?: string; age?: number }) =>
   api.patch('/auth/me', data);
 
 export const completeOnboarding = (data: any) =>
@@ -94,5 +94,14 @@ export const updateFixedExpense = (id: number, data: { name?: string; amount?: n
 
 export const deleteFixedExpense = (id: number) =>
   api.delete(`/dashboard/fixed-expenses/${id}`);
+
+export const getRfmScore = (userId: number, persist: boolean = true) =>
+  api.get(`/rfm/${userId}?persist=${persist}`);
+
+export const getRfmDistribution = () =>
+  api.get('/rfm/segments/distribution');
+
+export const getRfmHistory = (userId: number) =>
+  api.get(`/rfm/${userId}/history`);
 
 export default api;

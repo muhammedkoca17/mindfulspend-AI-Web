@@ -68,7 +68,7 @@ def analyze_transaction(payload: TransactionCreate, db: Session = Depends(get_db
         "f_score": rfm.f_score,
         "m_score": rfm.m_score,
         "rfm_score": rfm.rfm_risk,
-        "age": 30,
+        "age": getattr(user, 'age', 30) or 30,
         "quantity": 1,
         "price": payload.amount,
         "amount_try": payload.amount,

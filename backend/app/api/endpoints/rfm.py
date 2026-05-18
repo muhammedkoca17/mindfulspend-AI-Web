@@ -54,6 +54,44 @@ def get_rfm(user_id: int, persist: bool = True, db: Session = Depends(get_db)):
     )
 
 
+@router.get("/{user_id}/history")
+def rfm_history(user_id: int, db: Session = Depends(get_db)):
+    """Return all historical RFM snapshots for a user, ordered by time.
+    
+    Used by the frontend to plot RFM progression charts showing how
+    the user's financial behavior changed over weeks/months.
+    """
+    user = db.get(User, user_id)
+    if not user:
+        raise HTTPException(404, "User not found")
+
+    records = (
+        db.query(RfmScore)
+        .filter(RfmScore.user_id == user_id)
+        .order_by(RfmScore.computed_at.asc())
+        .all()
+    )
+
+    return {
+        "user_id": user_id,
+        "count": len(records),
+        "history": [
+            {
+                "computed_at": r.computed_at.isoformat() if r.computed_at else None,
+                "recency_days": r.recency_days,
+                "frequency": r.frequency,
+                "monetary": r.monetary,
+                "r_score": r.r_score,
+                "f_score": r.f_score,
+                "m_score": r.m_score,
+                "rfm_risk": r.rfm_risk,
+                "segment": r.segment,
+            }
+            for r in records
+        ],
+    }
+
+
 @router.get("/segments/distribution")
 def segment_distribution(db: Session = Depends(get_db)):
     """Aggregate segment breakdown for the dashboard heatmap."""

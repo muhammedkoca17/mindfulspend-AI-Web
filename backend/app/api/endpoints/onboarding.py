@@ -40,6 +40,7 @@ class GoalInput(BaseModel):
 
 class OnboardingPayload(BaseModel):
     monthly_salary: float
+    age: int = 30
     fixed_expenses: list[FixedExpenseInput] = []
     goals: list[GoalInput] = []
     risk_profile: str = "moderate"  # saver, moderate, spender
@@ -67,9 +68,10 @@ def complete_onboarding(
             detail="Risk profili: saver, moderate veya spender olmalidir",
         )
 
-    # Step 1: Salary
+    # Step 1: Salary & Demographics
     user.monthly_salary = data.monthly_salary
     user.risk_profile = data.risk_profile
+    user.age = data.age
 
     # Step 2: Fixed expenses
     for exp in data.fixed_expenses:
@@ -122,4 +124,5 @@ def onboarding_status(user: User = Depends(get_current_user)):
         "onboarding_completed": user.onboarding_completed,
         "monthly_salary": user.monthly_salary,
         "risk_profile": user.risk_profile,
+        "age": user.age,
     }

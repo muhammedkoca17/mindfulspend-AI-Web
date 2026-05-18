@@ -7,6 +7,7 @@ import Market from './pages/Market';
 import Cart from './pages/Cart';
 import Profile from './pages/Profile';
 import Goals from './pages/Goals';
+import RfmAnalytics from './pages/RfmAnalytics';
 import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }: any) => {
@@ -32,6 +33,7 @@ export default function App() {
           <Route path="cart" element={<Cart />} />
           <Route path="goals" element={<Goals />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="rfm" element={<RfmAnalytics />} />
         </Route>
       </Routes>
     </BrowserRouter>
