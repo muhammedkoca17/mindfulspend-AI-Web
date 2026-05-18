@@ -8,7 +8,7 @@ Final RFM_Risk in [1.0, 5.0]:
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import numpy as np
 import pandas as pd
@@ -51,7 +51,7 @@ def compute_rfm(
 ) -> RfmResult:
     """Compute RFM_Risk from a DataFrame (training/batch mode)."""
     if reference_date is None:
-        reference_date = datetime.now(timezone.utc)
+        reference_date = datetime.now(UTC)
 
     df = transactions.copy()
     if df.empty:
@@ -95,7 +95,7 @@ def compute_rfm_live(user_id: int, db: Session, window_days: int = 90) -> RfmRes
     """Compute RFM from LIVE database transactions for a single user."""
     from app.db.models import Transaction
 
-    cutoff = datetime.now(timezone.utc) - timedelta(days=window_days)
+    cutoff = datetime.now(UTC) - timedelta(days=window_days)
 
     rows = (
         db.query(Transaction.occurred_at, Transaction.amount, Transaction.spending_type)
@@ -110,7 +110,7 @@ def compute_rfm_live(user_id: int, db: Session, window_days: int = 90) -> RfmRes
             segment=segment_for_score(1.0),
         )
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
 
     # Filter discretionary
     disc_rows = [r for r in rows if r.spending_type == "discretionary"]
@@ -118,7 +118,7 @@ def compute_rfm_live(user_id: int, db: Session, window_days: int = 90) -> RfmRes
     if disc_rows:
         last_ts = max(r.occurred_at for r in disc_rows)
         if last_ts.tzinfo is None:
-            last_ts = last_ts.replace(tzinfo=timezone.utc)
+            last_ts = last_ts.replace(tzinfo=UTC)
         recency = (now - last_ts).total_seconds() / 86_400
     else:
         recency = float(window_days)

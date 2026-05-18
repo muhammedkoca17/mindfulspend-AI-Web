@@ -8,7 +8,7 @@ Two modes:
 """
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import numpy as np
 import pandas as pd
@@ -108,7 +108,7 @@ def build_realtime_features(cart_items, user, db) -> dict:
     from app.db.models import Transaction
     from app.services.rfm import compute_rfm_live
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     hour = now.hour
     dow = now.weekday()
 

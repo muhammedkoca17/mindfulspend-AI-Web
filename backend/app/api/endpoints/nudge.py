@@ -9,11 +9,11 @@ from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.endpoints.auth import get_current_user
+from app.core.config import settings
 from app.core.gemini_agent import chat_with_gemini, generate_nudge
 from app.db.database import get_db
 from app.db.models import NudgeLog, Transaction, User
 from app.schemas.transaction import NudgeRequest, NudgeResponse
-from app.core.config import settings
 
 
 class ChatRequest(BaseModel):
@@ -212,5 +212,5 @@ async def chat_endpoint(
     try:
         reply = await chat_with_gemini(request.message, db, user.id)
         return {"reply": reply, "user_id": user.id}
-    except Exception as e:
-        return {"reply": f"Bir hata olustu, lutfen tekrar dene.", "user_id": user.id}
+    except Exception:
+        return {"reply": "Bir hata olustu, lutfen tekrar dene.", "user_id": user.id}

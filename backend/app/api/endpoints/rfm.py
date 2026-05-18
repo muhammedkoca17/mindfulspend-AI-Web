@@ -1,5 +1,5 @@
 """RFM scoring endpoint — used by the RFM_Dashboard component."""
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException
@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from app.db.database import get_db
 from app.db.models import RfmScore, Transaction, User
 from app.schemas.transaction import RfmSummary
-from app.services.constants import segment_for_score
 from app.services.rfm import compute_rfm
 
 router = APIRouter(prefix="/rfm", tags=["rfm"])
@@ -29,7 +28,7 @@ def get_rfm(user_id: int, persist: bool = True, db: Session = Depends(get_db)):
         }
         for t in txs
     ])
-    result = compute_rfm(df, reference_date=datetime.now(timezone.utc))
+    result = compute_rfm(df, reference_date=datetime.now(UTC))
 
     if persist:
         record = RfmScore(

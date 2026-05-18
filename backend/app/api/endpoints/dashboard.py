@@ -1,8 +1,8 @@
 """Dashboard analytics endpoints — spending breakdown, nudge success, goals, time risk."""
 from __future__ import annotations
 
-from datetime import datetime, timedelta, timezone, date
 from collections import defaultdict
+from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
@@ -20,7 +20,7 @@ def spending_breakdown(
     user: User = Depends(get_current_user),
 ):
     """Last 30 days: essential vs discretionary totals."""
-    cutoff = datetime.now(timezone.utc) - timedelta(days=30)
+    cutoff = datetime.now(UTC) - timedelta(days=30)
     rows = (
         db.query(Transaction.spending_type, Transaction.amount)
         .filter(Transaction.user_id == user.id, Transaction.occurred_at >= cutoff)
@@ -46,7 +46,7 @@ def nudge_success(
     user: User = Depends(get_current_user),
 ):
     """Weekly savings from accepted nudges on discretionary items."""
-    cutoff = datetime.now(timezone.utc) - timedelta(days=90)
+    cutoff = datetime.now(UTC) - timedelta(days=90)
     rows = (
         db.query(Transaction.occurred_at, Transaction.amount)
         .filter(
@@ -102,7 +102,7 @@ def time_risk(
     user: User = Depends(get_current_user),
 ):
     """Impulsive spending risk by hour of day."""
-    cutoff = datetime.now(timezone.utc) - timedelta(days=90)
+    cutoff = datetime.now(UTC) - timedelta(days=90)
     rows = (
         db.query(Transaction.occurred_at, Transaction.risk_probability)
         .filter(Transaction.user_id == user.id, Transaction.occurred_at >= cutoff)
@@ -127,6 +127,7 @@ def time_risk(
 
 from app.db.models import FixedExpense
 
+
 @router.get("/fixed-expenses")
 def fixed_expenses(
     db: Session = Depends(get_db),
@@ -147,8 +148,9 @@ def fixed_expenses(
     ]
 
 
+
 from pydantic import BaseModel
-from typing import Optional
+
 
 class FixedExpenseCreate(BaseModel):
     name: str
@@ -157,10 +159,10 @@ class FixedExpenseCreate(BaseModel):
     due_day: int = 1
 
 class FixedExpenseUpdate(BaseModel):
-    name: Optional[str] = None
-    amount: Optional[float] = None
-    category: Optional[str] = None
-    due_day: Optional[int] = None
+    name: str | None = None
+    amount: float | None = None
+    category: str | None = None
+    due_day: int | None = None
 
 @router.post("/fixed-expenses")
 def create_fixed_expense(

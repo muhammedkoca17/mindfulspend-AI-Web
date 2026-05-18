@@ -9,7 +9,7 @@ Flow:
 """
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -17,10 +17,10 @@ from sqlalchemy import func
 from sqlalchemy.orm import Session
 
 from app.api.endpoints.auth import get_current_user
+from app.core.gemini_agent import GeminiAgent
 from app.db.database import get_db
 from app.db.models import Cart, CartItem, FixedExpense, Goal, Product, Transaction, User
 from app.services.categories import DISCRETIONARY_CATEGORIES
-from app.core.gemini_agent import GeminiAgent
 from app.services.ml_predictor import is_models_ready, predict_all
 from app.services.rfm import compute_rfm_live
 
@@ -100,7 +100,7 @@ def _calculate_cart_summary(cart: Cart) -> dict:
 
 def _build_cart_features(cart: Cart, user: User, db: Session) -> dict:
     """Build ML feature dict from live cart + user data."""
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     total = sum(i.total_price for i in cart.items)
     qty = sum(i.quantity for i in cart.items)
     essential_count = sum(1 for i in cart.items if i.product.is_essential)
@@ -368,7 +368,7 @@ def confirm_checkout(
     cart.nudge_accepted = decision.nudge_accepted
     cart.status = "checked_out"
 
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     created = []
     for item in cart.items:
         tx = Transaction(

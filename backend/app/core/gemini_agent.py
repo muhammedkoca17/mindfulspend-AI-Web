@@ -17,12 +17,11 @@ Behavioral Finance Strategies (Kahneman & Thaler):
 from __future__ import annotations
 
 import asyncio
-import json
 import logging
 import random
 import time
-from datetime import date, datetime, timedelta, timezone
-from typing import Literal, Optional
+from datetime import UTC, date, datetime, timedelta
+from typing import Literal
 
 from app.core.config import settings
 
@@ -172,6 +171,7 @@ ALL_TOOLS = [
 def execute_function(function_name: str, args: dict, db, user_id: int) -> dict:
     """Execute a function call from Gemini and return result."""
     from sqlalchemy import func as sqlfunc
+
     from app.db.models import FixedExpense, Goal, Transaction, User
 
     if function_name == "get_user_budget":
@@ -180,7 +180,7 @@ def execute_function(function_name: str, args: dict, db, user_id: int) -> dict:
         if not user:
             return {"error": "Kullanici bulunamadi"}
 
-        month_start = datetime.now(timezone.utc).replace(day=1, hour=0, minute=0, second=0)
+        month_start = datetime.now(UTC).replace(day=1, hour=0, minute=0, second=0)
         monthly_spending = (
             db.query(sqlfunc.sum(Transaction.amount))
             .filter(Transaction.user_id == uid, Transaction.occurred_at >= month_start)
@@ -217,7 +217,7 @@ def execute_function(function_name: str, args: dict, db, user_id: int) -> dict:
     elif function_name == "get_recent_transactions":
         uid = args.get("user_id", user_id)
         days = args.get("days", 30)
-        cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+        cutoff = datetime.now(UTC) - timedelta(days=days)
         txs = (
             db.query(Transaction)
             .filter(Transaction.user_id == uid, Transaction.occurred_at >= cutoff)
@@ -317,8 +317,8 @@ def _mock_nudge(strategy: NudgeStrategy, context: dict) -> str:
             f"Kucuk bir erteleme, buyuk bir kazanim.",
         ],
         "social_norms": [
-            f"Seninle ayni gelir grubundaki kullanicilarin cogu bu hafta benzer harcamayi "
-            f"ertelemeyi secti — sen de denemek ister misin?",
+            "Seninle ayni gelir grubundaki kullanicilarin cogu bu hafta benzer harcamayi "
+            "ertelemeyi secti — sen de denemek ister misin?",
         ],
         "planning": [
             f"Bu ay {remaining:,.0f} TL butcen kaldi. "
@@ -632,7 +632,7 @@ class GeminiAgent:
 
 
 # Singleton agent
-_agent_instance: Optional[MindfulSpendAgent] = None
+_agent_instance: MindfulSpendAgent | None = None
 
 
 class MindfulSpendAgent:

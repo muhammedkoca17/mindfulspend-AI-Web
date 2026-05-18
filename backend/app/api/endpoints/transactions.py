@@ -1,8 +1,7 @@
 """Transaction listing endpoint (live feed for the dashboard) + manual item entry."""
 from __future__ import annotations
 
-from datetime import date, datetime, timezone
-from typing import Optional
+from datetime import UTC, date, datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
@@ -36,7 +35,7 @@ def list_transactions(
 def recent_for_user(user_id: int, hours: int = 24, db: Session = Depends(get_db)):
     if not db.get(User, user_id):
         raise HTTPException(404, "User not found")
-    cutoff = datetime.now(timezone.utc).replace(tzinfo=None)
+    cutoff = datetime.now(UTC).replace(tzinfo=None)
     return (
         db.query(Transaction)
         .filter(Transaction.user_id == user_id)
@@ -59,7 +58,7 @@ class ManualTransactionItem(BaseModel):
 class ManualTransactionBatch(BaseModel):
     items: list[ManualTransactionItem]
     merchant: str = "Market"
-    transaction_date: Optional[date] = None  # None = today
+    transaction_date: date | None = None  # None = today
 
 
 @router.post("/manual")
@@ -73,7 +72,6 @@ def add_manual_transactions(
     Auto-detects: Elma -> market_temel_ihtiyac/meyve_sebze (essential)
                   Cikolata -> market_atistirmalik/cikolata_seker (discretionary)
     """
-    from app.api.endpoints.auth import get_current_user, oauth2_scheme
     from app.services.categories import (
         detect_category,
         get_category_label,
@@ -83,10 +81,9 @@ def add_manual_transactions(
     # Try to get user from token, fall back to first user for demo
     user = None
     try:
-        from fastapi import Request
 
         # Try auth if available
-        from starlette.requests import Request as StarletteRequest
+        pass
     except Exception:
         pass
 

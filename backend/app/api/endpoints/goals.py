@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 from datetime import date
-from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -21,15 +20,15 @@ router = APIRouter(prefix="/goals", tags=["Goals"])
 class GoalCreate(BaseModel):
     title: str
     target_amount: float
-    target_date: Optional[date] = None
+    target_date: date | None = None
     category: str = "other"
     priority: int = 1
 
 
 class GoalUpdate(BaseModel):
-    current_amount: Optional[float] = None
-    target_amount: Optional[float] = None
-    title: Optional[str] = None
+    current_amount: float | None = None
+    target_amount: float | None = None
+    title: str | None = None
 
 
 # ---------------------------------------------------------------------------

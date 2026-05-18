@@ -8,7 +8,6 @@ Step 4: Risk profile assessment (saver / moderate / spender)
 from __future__ import annotations
 
 from datetime import date
-from typing import Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
@@ -34,7 +33,7 @@ class FixedExpenseInput(BaseModel):
 class GoalInput(BaseModel):
     title: str
     target_amount: float
-    target_date: Optional[date] = None
+    target_date: date | None = None
     category: str = "other"  # vacation, car, home, emergency, education, other
     priority: int = 1
 

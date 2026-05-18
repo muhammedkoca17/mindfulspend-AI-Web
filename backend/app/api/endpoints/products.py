@@ -5,8 +5,6 @@ No auth required for browsing — auth is only needed for cart operations.
 """
 from __future__ import annotations
 
-from typing import Optional
-
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import func
 from sqlalchemy.orm import Session
@@ -20,10 +18,10 @@ router = APIRouter(prefix="/products", tags=["Virtual Market - Products"])
 
 @router.get("/")
 def list_products(
-    category: Optional[str] = None,
-    sub_category: Optional[str] = None,
-    is_essential: Optional[bool] = None,
-    search: Optional[str] = None,
+    category: str | None = None,
+    sub_category: str | None = None,
+    is_essential: bool | None = None,
+    search: str | None = None,
     limit: int = Query(default=50, le=200),
     offset: int = 0,
     db: Session = Depends(get_db),

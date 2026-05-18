@@ -133,8 +133,9 @@ def get_user_rfm(user_id: str, db) -> dict:
 
     Falls back to the static CSV lookup if DB query returns nothing.
     """
+    from datetime import datetime
+
     from sqlalchemy import text
-    from datetime import datetime, timedelta
 
     query = text("""
         SELECT

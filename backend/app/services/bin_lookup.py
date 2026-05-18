@@ -13,7 +13,6 @@ from __future__ import annotations
 import json
 import logging
 import os
-from typing import Optional
 
 log = logging.getLogger(__name__)
 
@@ -33,7 +32,7 @@ def _load_bin_data() -> None:
         log.warning("BIN data not found at %s", bin_path)
         return
 
-    with open(bin_path, "r", encoding="utf-8") as f:
+    with open(bin_path, encoding="utf-8") as f:
         raw = json.load(f)
 
     # Index by BIN prefix for O(1) lookup
@@ -48,7 +47,7 @@ def _load_bin_data() -> None:
     log.info("Loaded %d BIN records", len(_BIN_DATA))
 
 
-def lookup_bin(card_first_6: str) -> Optional[dict]:
+def lookup_bin(card_first_6: str) -> dict | None:
     """Lookup card info from first 6 digits.
 
     Returns: {"bin": "405040", "network": "VISA", "type": "DEBIT",

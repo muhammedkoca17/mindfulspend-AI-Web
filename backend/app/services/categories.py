@@ -11,7 +11,6 @@ from __future__ import annotations
 
 import json
 import os
-from typing import Optional
 
 # ---------------------------------------------------------------------------
 # Main category hierarchy
@@ -208,7 +207,7 @@ def _load_product_map() -> None:
         os.path.dirname(__file__), "..", "..", "data", "01_raw", "lookups", "product_category_map.json"
     )
     if os.path.exists(map_path):
-        with open(map_path, "r", encoding="utf-8") as f:
+        with open(map_path, encoding="utf-8") as f:
             _PRODUCT_MAP = json.load(f)
 
 
@@ -262,7 +261,7 @@ def detect_category(item_name: str) -> tuple[str, str, bool]:
     return "diger", "diger", False
 
 
-def _map_dataset_category(dataset_cat: str) -> Optional[tuple[str, str, bool]]:
+def _map_dataset_category(dataset_cat: str) -> tuple[str, str, bool] | None:
     """Map a Turkish Market Sales CATEGORY_NAME1 to our hierarchy."""
     cat_lower = dataset_cat.lower().strip()
     mapping = {

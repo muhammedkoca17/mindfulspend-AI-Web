@@ -6,9 +6,8 @@ Flow:
   3. Compute live RFM for the user.
   4. Return structured analysis payload.
 """
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
-import pandas as pd
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -21,7 +20,7 @@ from app.services.ml_predictor import (
     is_models_ready,
     predict_all,
 )
-from app.services.rfm import compute_rfm, compute_rfm_live
+from app.services.rfm import compute_rfm_live
 
 router = APIRouter(prefix="/analyze", tags=["analyze"])
 
@@ -36,7 +35,7 @@ def analyze_transaction(payload: TransactionCreate, db: Session = Depends(get_db
         raise HTTPException(503, "ML models not trained yet. Run scripts/train_xgboost.py first.")
 
     spending_type = MCC_MAP.get(payload.mcc_code, (payload.category, "discretionary"))[1]
-    occurred_at = payload.occurred_at or datetime.now(timezone.utc).replace(tzinfo=None)
+    occurred_at = payload.occurred_at or datetime.now(UTC).replace(tzinfo=None)
 
     # ---- 1. User historical stats (lightweight, no heavy DataFrame ops) ----
     past = (
