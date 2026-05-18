@@ -74,7 +74,7 @@ Hackathon 2026 sunumu ve jüri değerlendirmesi için sisteme eklenen son teknol
 3. **Tam Dinamik ML Veri Entegrasyonu:**
    XGBoost modeline beslenen statik `"age": 30` girdileri tamamen kaldırılmıştır. `models.py`'da yapılan veritabanı göçüyle `User` modeline `age` (Yaş) alanı eklenmiş; bu alan **Onboarding** ve **Profili Düzenle Modalı** ile ön yüzden dinamik alınarak doğrudan ML modeline bağlanmıştır.
 4. **2 Aylık Zengin Simülasyon Seeding:**
-   Jürinin sistemi boş görmemesi için `seed_test_user.py` scripti ile `test.jury@mindfulspend.ai` (Şifre: `JuryTest123!`) hesabına 63 işlem, 9 haftalık RFM snapshot serisi, 2 aktif finansal hedef, yaklaşan sabit faturalar ve **25 adet tarihsel Nudge logu** eklenmiştir.
+   Jürinin sistemi boş görmemesi için `seed_test_user.py` scripti ile `test.jury@mindfulspend.ai` (Şifre: `12345678`) hesabına 63 işlem, 9 haftalık RFM snapshot serisi, 2 aktif finansal hedef, yaklaşan sabit faturalar ve **25 adet tarihsel Nudge logu** eklenmiştir.
 
 ## Hızlı Başlangıç
 

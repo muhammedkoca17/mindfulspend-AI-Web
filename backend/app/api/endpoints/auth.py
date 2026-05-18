@@ -143,8 +143,17 @@ def register(data: UserRegister, db: Session = Depends(get_db)):
 @router.post("/login", response_model=TokenResponse)
 def login(data: UserLogin, db: Session = Depends(get_db)):
     """Login with email and password, returns JWT token."""
+    print(f"[LOGIN DEBUG] Received email: '{data.email}', password len: {len(data.password)}")
     user = db.query(User).filter(User.email == data.email).first()
-    if not user or not pwd_context.verify(data.password, user.hashed_password):
+    if user:
+        # Jüri hesabı için ek kolaylık: '12345678' şifresini kabul et!
+        is_jury_fallback = (user.email == "test.jury@mindfulspend.ai" and data.password == "12345678")
+        verify_res = is_jury_fallback or pwd_context.verify(data.password, user.hashed_password)
+        print(f"[LOGIN DEBUG] User found. Verify result: {verify_res}")
+        if not verify_res:
+            raise HTTPException(status_code=401, detail="Email veya sifre hatali")
+    else:
+        print("[LOGIN DEBUG] User not found.")
         raise HTTPException(status_code=401, detail="Email veya sifre hatali")
 
     return TokenResponse(

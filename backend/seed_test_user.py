@@ -1,12 +1,12 @@
 """Seed a realistic test user with 2 months of evolving financial data.
 
 Creates:
-  - 1 test user (test.jury@mindfulspend.ai / JuryTest123!)
+  - 1 test user (test.jury@mindfulspend.ai / 12345678)
   - ~70 transactions spread over 60 days simulating behavioral drift
   - Weekly RFM snapshots showing segment progression over time
   - Fixed expenses (rent, bills, subscriptions)
   - 2 financial goals with partial progress
-
+  
 The data simulates a user who starts as a "Sadık Tasarrufçu" (loyal saver)
 and gradually becomes more impulsive, transitioning through "Risk Potansiyeli"
 to "İmpulsif / Kırılgan" — showing the RFM model's detection capability live.
@@ -35,7 +35,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # ─── Configuration ────────────────────────────────────────────
 TEST_EMAIL = "test.jury@mindfulspend.ai"
-TEST_PASSWORD = "JuryTest123!"
+TEST_PASSWORD = "12345678"
 TEST_NAME = "Jury Test Kullanıcısı"
 SALARY = 45_000.0  # ₺45,000/month
 
