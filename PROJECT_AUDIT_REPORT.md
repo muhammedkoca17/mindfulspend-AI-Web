@@ -291,9 +291,9 @@ cart_items
 
 ### ML Pipeline
 
-#### 1. XGBoost Risk Predictor (AUC 0.9999)
+#### 1. XGBoost Impulsive Classifier (XGBClassifier)
 
-**Training Data:** 24,303 transactions from BudgetWise + Financial Transactions combined
+**Training Data:** 99,000+ transactions from customer_shopping_data.csv + online_retail_II.csv combined
 
 **Features Engineered (16 total):**
 - `user_avg_amount` — Mean transaction amount for user
@@ -314,22 +314,22 @@ cart_items
 - Threshold: 0.5 (binary flag stored in `Transaction.is_impulsive`)
 - Base rate in training data: 6.9% (realistic)
 
-#### 2. RandomForest Budget Regressor (MAPE 0.31)
+#### 2. XGBoost Budget Risk Regressor (XGBRegressor)
 
-**Training Data:** 3,000 monthly snapshots × 10 features from Personal Finance Tracker
+**Training Data:** 99,000+ transactions from customer_shopping_data.csv + online_retail_II.csv combined
 
 **Features:**
-- `monthly_income`, `monthly_expense_total`
-- `essential_spending`, `discretionary_spending`
-- `credit_score`, `debt_to_income_ratio`
-- `savings_rate`, `financial_stress_level`
-- Encoded: scenario (normal/inflation/recession), income_type
+- `hour`, `day_of_week`, `is_weekend`, `is_night`, `is_high_value`
+- `is_essential`, `deviation_from_avg`, `r_score`, `f_score`, `m_score`
+- `rfm_score`, `age`, `quantity`, `price`, `amount_try`
 
-**Output:** Next-month expected expense ratio (predicted / budget_goal)
-- Value > 1.0 → projected overrun
-- MAPE 0.31 is professional-grade on real data
+**Output:** Predicted budget risk score in range [0.0, 1.0]
 
-**Not Currently Used:** Loaded but endpoint not exposed; available for future analytics dashboard
+#### 3. XGBoost Nudge Acceptance Classifier (XGBClassifier)
+
+**Training Data:** 99,000+ transactions with synthetic nudge acceptance targets (nudge_accepted 0/1)
+
+**Output:** Probability user accepts nudge (range 0.0 - 1.0)
 
 #### 3. Feature Engineering Pipeline (`app/services/feature_engineering.py`)
 
@@ -484,25 +484,30 @@ interface NudgeResponse {
 
 ## 5. DATA LAYER
 
-### Data Sources (3 Kaggle Datasets)
+### Data Sources (Real Kaggle & Local Hybrids)
 
-| Dataset | Rows | Columns | Strategic Role | Location |
-|---------|------|---------|---|----------|
-| **Personal Finance Tracker** | 3,000 | 25 features | Macroeconomic scenarios (normal/inflation/recession), financial stress, credit scores | [Kaggle](https://www.kaggle.com/datasets/henryrichter/personal-finance-tracker) |
-| **BudgetWise Personal Finance** | 31,736 | 6–15 features | ETL complexity demo: 60+ category variants (Food/FOOD/Fod/Foodd), amount parsing ($143/2,524/83,802), date format chaos | [Kaggle](https://www.kaggle.com/datasets/omercolakoglu/budgetwise-personal-finance-dataset) |
-| **Financial Transactions (Expenses & Income)** | 938 exp + 349 inc | 8 features | High-granularity micro-categories (Cafe, Taxi, Public transport), temporal patterns (late-night discretionary detection) | [Kaggle](https://www.kaggle.com/datasets/omercolakoglu/financial-transactions-dataset) |
+| Dataset | Format | Strategic Role | Source Details |
+|---------|--------|----------------|----------------|
+| **customer_shopping_data.csv** | CSV | Turkish shopper demographics, malls, age/gender variables, price/quantity | Kaggle Shopping Dataset |
+| **online_retail_II.csv** | CSV | Real-world online retail transaction items, GBP amounts converted to TRY (40x) | Kaggle Online Retail II |
+| **market_sales.xlsx** | Excel | High-density supermarket basket data and essential/discretionary frequency tracking | Supermarket Sales |
+| **cards_data.csv** | CSV | Credit/debit card types, bank BIN prefixes and processing limits | Local cards db |
+| **users_data.csv** | CSV | Demographic data for user profiling and baseline aggregates | User profiles |
+| **turkey_bin_list.json** | JSON | Standard Turkish Bank BIN numbers, card brand and type metadata | Turkish BIN List |
 
-**Total raw data:** 35,961 rows of financial transactions
+**Total raw data:** 99,000+ rows of financial transactions
 
 ### ETL Pipeline (5-Stage Data Flow)
 
 #### Stage 1: Raw Data Intake (`backend/data/01_raw/`)
 Files:
-- `personal_finance.csv` — User financial profiles + credit scores
-- `budgetwise_clean.csv` — Structured grocery expenses
-- `budgetwise_dirty.csv` — Messy variant for ETL showcase
-- `transactions_expenses.csv` — Categorized expenses with MCC codes
-- `transactions_income.csv` — Income sources
+- `customer_shopping_data.csv` — Shopper transactions (age, gender, mall, payment method)
+- `online_retail_II.csv` — Retail transactional item rows (quantity, price, customer ID)
+- `market_sales.xlsx` — Supermarket basket itemizations
+- `cards_data.csv` — Card brands and type information
+- `users_data.csv` — User demographic profiles
+- `turkey_bin_list.json` — Turkey Bank Identification Number mappings
+- `lookups/` — Lookup tables (`mcc_codes.json`, `product_category_map.json`, `subscription_prices.json`)
 
 #### Stage 2: Data Cleaning (`backend/data/02_interim/`)
 **Handled by:** `app/services/etl.py`
@@ -521,37 +526,41 @@ Files:
 - Behavioral: `is_discretionary`, `is_late_night`, `category_frequency`
 - 16-element feature vector for XGBoost
 
-#### Stage 4: Model Training (`backend/scripts/train_models.py`)
+#### Stage 4: Model Training (`backend/scripts/train_xgboost.py`)
 ```python
-# XGBoost risk predictor
-X_train, y_train = build_feature_matrix_with_labels(
-    transactions_df,  # 24,303 rows
-    labels_df         # is_impulsive binary
-)
-xgb_model = XGBClassifier(max_depth=6, learning_rate=0.1)
-xgb_model.fit(X_train, y_train)
-joblib.dump(xgb_model, "app/ml_models/risk_predictor.joblib")
+# Model 1: Impulsive Classifier (XGBClassifier)
+m1 = XGBClassifier(n_estimators=200, max_depth=6, learning_rate=0.1)
+m1.fit(X_train, y_imp_train)
+joblib.dump(m1, "app/ml_models/impulsive_model.joblib")
 
-# RandomForest budget regressor
-rf_model = RandomForestRegressor(n_estimators=100, max_depth=15)
-rf_model.fit(X_budget, y_budget)  # 3,000 monthly profiles
-joblib.dump(rf_model, "app/ml_models/budget_regressor.joblib")
+# Model 2: Budget Risk Regressor (XGBRegressor)
+m2 = XGBRegressor(n_estimators=200, max_depth=5, learning_rate=0.1)
+m2.fit(X_train, y_budget_train)
+joblib.dump(m2, "app/ml_models/budget_risk_model.joblib")
+
+# Model 3: Nudge Acceptance Classifier (XGBClassifier)
+m3 = XGBClassifier(n_estimators=150, max_depth=5, learning_rate=0.1)
+m3.fit(X_train, y_nudge_train)
+joblib.dump(m3, "app/ml_models/nudge_model.joblib")
 ```
 
 #### Stage 5: Production Models
 **Location:** `app/ml_models/`
-- `risk_predictor.joblib` — XGBoost (AUC 0.9999)
-- `budget_regressor.joblib` — RandomForest (MAPE 0.31)
+- `impulsive_model.joblib` — XGBoost Classifier (is this purchase impulsive?)
+- `budget_risk_model.joblib` — XGBoost Regressor (budget overrun risk 0-1)
+- `nudge_model.joblib` — XGBoost Classifier (will user accept a nudge?)
 
 **Loading:** Singleton pattern in `app/services/ml_predictor.py`
 ```python
-_risk_model = None
+_impulsive_model = None
+_budget_model = None
+_nudge_model = None
 
-def load_risk_model():
-    global _risk_model
-    if _risk_model is None:
-        _risk_model = joblib.load("app/ml_models/risk_predictor.joblib")
-    return _risk_model
+def load_impulsive_model():
+    global _impulsive_model
+    if _impulsive_model is None:
+        _impulsive_model = joblib.load("app/ml_models/impulsive_model.joblib")
+    return _impulsive_model
 ```
 
 ### RFM Risk Scoring (Behavioral Finance Inversion)

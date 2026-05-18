@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
     if not is_models_ready():
         log.warning(
             "ML models not found in %s — /analyze will return 503 until you run "
-            "`python scripts/train_models.py`.",
+            "`python scripts/train_xgboost.py`.",
             settings.models_dir,
         )
     if settings.gemini_enabled:
