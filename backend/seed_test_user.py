@@ -63,6 +63,7 @@ def seed_test_user():
             user.risk_profile = "moderate"
             user.onboarding_completed = True
             user.age = 28
+            user.hashed_password = pwd_context.hash(TEST_PASSWORD)
             db.commit()
         else:
             print(f"[NEW] Creating test user: {TEST_EMAIL}")

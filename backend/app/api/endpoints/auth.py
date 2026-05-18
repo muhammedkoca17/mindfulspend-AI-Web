@@ -107,6 +107,15 @@ def register(data: UserRegister, db: Session = Depends(get_db)):
     if db.query(User).filter(User.email == data.email).first():
         raise HTTPException(status_code=400, detail="Bu email adresi zaten kayitli")
 
+    # E-posta alan adı doğrulaması (Sadece @gmail.com izin verilir. demo ve test.jury hariç)
+    email_lower = data.email.lower()
+    allowed_exceptions = {"demo@mindfulspend.ai", "test.jury@mindfulspend.ai"}
+    if email_lower not in allowed_exceptions and not email_lower.endswith("@gmail.com"):
+        raise HTTPException(
+            status_code=400,
+            detail="Sadece @gmail.com uzantılı e-posta adresleri ile kayıt olunabilir."
+        )
+
     if len(data.password) < 8:
         raise HTTPException(status_code=400, detail="Sifre en az 8 karakter olmalidir")
 
