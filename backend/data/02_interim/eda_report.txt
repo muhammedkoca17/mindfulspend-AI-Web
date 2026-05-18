@@ -1,0 +1,193 @@
+
+============================================================
+FILE: customer_shopping_data.csv
+Shape: (99457, 10)
+Columns: ['invoice_no', 'customer_id', 'gender', 'age', 'category', 'quantity', 'price', 'payment_method', 'invoice_date', 'shopping_mall']
+Dtypes:
+invoice_no         object
+customer_id        object
+gender             object
+age                 int64
+category           object
+quantity            int64
+price             float64
+payment_method     object
+invoice_date       object
+shopping_mall      object
+Nulls: None
+First 3 rows:
+  invoice_no customer_id  gender  age  category  quantity    price payment_method invoice_date   shopping_mall
+0    I138884     C241288  Female   28  Clothing         5  1500.40    Credit Card     5/8/2022          Kanyon
+1    I317333     C111565    Male   21     Shoes         3  1800.51     Debit Card   12/12/2021  Forum Istanbul
+2    I127801     C266599    Male   20  Clothing         1   300.08           Cash    9/11/2021       Metrocity
+Last 3 rows:
+      invoice_no customer_id  gender  age         category  quantity    price payment_method invoice_date     shopping_mall
+99454    I824010     C103292    Male   63  Food & Beverage         2    10.46     Debit Card   28/03/2021         Metrocity
+99455    I702964     C800631    Male   56       Technology         4  4200.00           Cash   16/03/2021      Istinye Park
+99456    I232867     C273973  Female   36         Souvenir         3    35.19    Credit Card   15/10/2022  Mall of Istanbul
+============================================================
+
+============================================================
+FILE: online_retail_II.csv
+Shape: (1067371, 8)
+Columns: ['Invoice', 'StockCode', 'Description', 'Quantity', 'InvoiceDate', 'Price', 'Customer ID', 'Country']
+Dtypes:
+Invoice         object
+StockCode       object
+Description     object
+Quantity         int64
+InvoiceDate     object
+Price          float64
+Customer ID    float64
+Country         object
+Nulls: {'Description': 4382, 'Customer ID': 243007}
+First 3 rows:
+  Invoice StockCode                          Description  Quantity          InvoiceDate  Price  Customer ID         Country
+0  489434     85048  15CM CHRISTMAS GLASS BALL 20 LIGHTS        12  2009-12-01 07:45:00   6.95      13085.0  United Kingdom
+1  489434    79323P                   PINK CHERRY LIGHTS        12  2009-12-01 07:45:00   6.75      13085.0  United Kingdom
+2  489434    79323W                  WHITE CHERRY LIGHTS        12  2009-12-01 07:45:00   6.75      13085.0  United Kingdom
+Last 3 rows:
+        Invoice StockCode                      Description  Quantity          InvoiceDate  Price  Customer ID Country
+1067368  581587     23255  CHILDRENS CUTLERY CIRCUS PARADE         4  2011-12-09 12:50:00   4.15      12680.0  France
+1067369  581587     22138    BAKING SET 9 PIECE RETROSPOT          3  2011-12-09 12:50:00   4.95      12680.0  France
+1067370  581587      POST                          POSTAGE         1  2011-12-09 12:50:00  18.00      12680.0  France
+============================================================
+
+============================================================
+FILE: market_sales.xlsx
+Shape: (611108, 26)
+Columns: ['ID', 'ITEMCODE', 'ITEMNAME', 'FICHENO', 'DATE_', 'AMOUNT', 'PRICE', 'LINENETTOTAL', 'LINENET', 'BRANCHNR', 'BRANCH', 'SALESMAN', 'CITY', 'REGION', 'LATITUDE', 'LONGITUDE', 'CLIENTCODE', 'CLIENTNAME', 'BRANDCODE', 'BRAND', 'CATEGORY_NAME1', 'CATEGORY_NAME2', 'CATEGORY_NAME3', 'STARTDATE', 'ENDDATE', 'GENDER']
+Dtypes:
+ID                       float64
+ITEMCODE                 float64
+ITEMNAME                  object
+FICHENO                    int64
+DATE_             datetime64[ns]
+AMOUNT                   float64
+PRICE                    float64
+LINENETTOTAL             float64
+LINENET                  float64
+BRANCHNR                 float64
+BRANCH                    object
+SALESMAN                  object
+CITY                      object
+REGION                    object
+LATITUDE                 float64
+LONGITUDE                float64
+CLIENTCODE                object
+CLIENTNAME                object
+BRANDCODE                 object
+BRAND                     object
+CATEGORY_NAME1            object
+CATEGORY_NAME2            object
+CATEGORY_NAME3            object
+STARTDATE         datetime64[ns]
+ENDDATE           datetime64[ns]
+GENDER                    object
+Nulls: {'ID': 1, 'ITEMCODE': 7167, 'ITEMNAME': 7167, 'DATE_': 1, 'AMOUNT': 1, 'PRICE': 1, 'LINENETTOTAL': 1, 'LINENET': 1, 'BRANCHNR': 1, 'BRANCH': 1, 'CITY': 1, 'REGION': 1, 'LATITUDE': 1, 'LONGITUDE': 1, 'CLIENTCODE': 18348, 'CLIENTNAME': 18365, 'BRANDCODE': 35557, 'BRAND': 35557, 'CATEGORY_NAME1': 7167, 'CATEGORY_NAME2': 27660, 'CATEGORY_NAME3': 209459, 'GENDER': 18365}
+First 3 rows:
+        ID  ITEMCODE                         ITEMNAME  FICHENO      DATE_  AMOUNT  PRICE  LINENETTOTAL  LINENET  BRANCHNR           BRANCH      SALESMAN      CITY   REGION  LATITUDE  LONGITUDE CLIENTCODE      CLIENTNAME BRANDCODE   BRAND CATEGORY_NAME1   CATEGORY_NAME2      CATEGORY_NAME3           STARTDATE             ENDDATE GENDER
+0  11738.0    5863.0  SPRITE 1 LT LIMON AROMALI GAZOZ    18456 2017-01-07     1.0   2.00          2.00     1.85      52.0   Kocaeli Subesi     Eyüp CİNE   Kocaeli  Marmara   40.8533    29.8815     467369  Sercan KIZILOK       156  SPRİTE         İÇECEK     GAZLI İÇECEK               GAZOZ 2017-01-08 16:16:11 2017-01-08 16:17:13      E
+1  10537.0       8.0                        TOZ SEKER    18105 2017-01-06     5.0   2.65         13.25    12.27       8.0   Antalya Subesi  İlhan ÖRENLİ   Antalya  Akdeniz   36.8841    30.7056     131464    İsmet ŞINGIR       NaN     NaN         İÇECEK        ÇAY KAHVE  SEKER TATLANDIRICI 2017-01-07 11:04:34 2017-01-07 11:05:37      E
+2  11335.0    5979.0             FALIM SAKIZ 5LI NANE    18350 2017-01-03     1.0   0.40          0.40     0.37      40.0  İstanbul Subesi  İsmet SARTIK  İstanbul  Marmara   41.0053    28.9770     656969     Yağız KUBAL       300   FALIM           GIDA  SAKIZ SEKERLEME               SAKIZ 2017-01-04 14:00:03 2017-01-04 14:01:01      E
+Last 3 rows:
+              ID  ITEMCODE                ITEMNAME  FICHENO      DATE_  AMOUNT  PRICE  LINENETTOTAL  LINENET  BRANCHNR           BRANCH        SALESMAN      CITY     REGION  LATITUDE  LONGITUDE CLIENTCODE        CLIENTNAME BRANDCODE BRAND CATEGORY_NAME1 CATEGORY_NAME2 CATEGORY_NAME3           STARTDATE             ENDDATE GENDER
+611105  492612.0       7.0            EKMEK 250 GR   130100 2017-03-15     1.0    0.9           0.9     0.89      59.0     Muğla Subesi  Nisa nur SAĞIM     Muğla        Ege   37.2153    28.3636      78643  Cengiz BEREKETÇİ       NaN   NaN           GIDA  UNLU MAMÜLLER          EKMEK 2017-03-16 17:51:04 2017-03-16 17:51:18      E
+611106  512343.0       7.0            EKMEK 250 GR   134762 2017-03-18     1.0    0.9           0.9     0.88      40.0  İstanbul Subesi     Arife DORAP  İstanbul    Marmara   41.0053    28.9770     926041  Elifnur EGİNKAYA       NaN   NaN           GIDA  UNLU MAMÜLLER          EKMEK 2017-03-19 17:00:12 2017-03-19 17:01:20      K
+611107  512179.0    3942.0  ETI 80 GR KARAM BITTER   134738 2017-03-18     1.0    1.9           1.9     1.76      74.0     Tokat Subesi  Lütfiye DÖŞEME     Tokat  Karadeniz   40.3167    36.5500     241748    Hacer CANDEMİR        44   ETİ           GIDA  BÜSKİVİ ÇEREZ        BÜSKİVİ 2017-03-19 16:00:15 2017-03-19 16:00:37      K
+============================================================
+
+============================================================
+FILE: cards_data.csv
+Shape: (6146, 13)
+Columns: ['id', 'client_id', 'card_brand', 'card_type', 'card_number', 'expires', 'cvv', 'has_chip', 'num_cards_issued', 'credit_limit', 'acct_open_date', 'year_pin_last_changed', 'card_on_dark_web']
+Dtypes:
+id                        int64
+client_id                 int64
+card_brand               object
+card_type                object
+card_number               int64
+expires                  object
+cvv                       int64
+has_chip                 object
+num_cards_issued          int64
+credit_limit             object
+acct_open_date           object
+year_pin_last_changed     int64
+card_on_dark_web         object
+Nulls: None
+First 3 rows:
+     id  client_id card_brand card_type       card_number  expires  cvv has_chip  num_cards_issued credit_limit acct_open_date  year_pin_last_changed card_on_dark_web
+0  4524        825       Visa     Debit  4344676511950444  12/2022  623      YES                 2       $24295        09/2002                   2008               No
+1  2731        825       Visa     Debit  4956965974959986  12/2020  393      YES                 2       $21968        04/2014                   2014               No
+2  3701        825       Visa     Debit  4582313478255491  02/2024  719      YES                 2       $46414        07/2003                   2004               No
+Last 3 rows:
+        id  client_id  card_brand card_type       card_number  expires  cvv has_chip  num_cards_issued credit_limit acct_open_date  year_pin_last_changed card_on_dark_web
+6143  1305       1007  Mastercard    Credit  5929512204765914  08/2020  237       NO                 2        $9200        02/2012                   2012               No
+6144   743       1110  Mastercard     Debit  5589768928167462  01/2020  630      YES                 1       $28074        01/2020                   2020               No
+6145  3199       1110        Visa    Credit  4994011318343994  12/2020  120      YES                 1       $14400        05/2017                   2017               No
+============================================================
+
+============================================================
+FILE: users_data.csv
+Shape: (2000, 14)
+Columns: ['id', 'current_age', 'retirement_age', 'birth_year', 'birth_month', 'gender', 'address', 'latitude', 'longitude', 'per_capita_income', 'yearly_income', 'total_debt', 'credit_score', 'num_credit_cards']
+Dtypes:
+id                     int64
+current_age            int64
+retirement_age         int64
+birth_year             int64
+birth_month            int64
+gender                object
+address               object
+latitude             float64
+longitude            float64
+per_capita_income     object
+yearly_income         object
+total_debt            object
+credit_score           int64
+num_credit_cards       int64
+Nulls: None
+First 3 rows:
+     id  current_age  retirement_age  birth_year  birth_month  gender                 address  latitude  longitude per_capita_income yearly_income total_debt  credit_score  num_credit_cards
+0   825           53              66        1966           11  Female           462 Rose Lane     34.15    -117.76            $29278        $59696    $127613           787                 5
+1  1746           53              68        1966           12  Female  3606 Federal Boulevard     40.76     -73.74            $37891        $77254    $191349           701                 5
+2  1718           81              67        1938           11  Female         766 Third Drive     34.02    -117.89            $22681        $33483       $196           698                 5
+Last 3 rows:
+        id  current_age  retirement_age  birth_year  birth_month  gender                address  latitude  longitude per_capita_income yearly_income total_debt  credit_score  num_credit_cards
+1997   185           47              67        1973            1  Female    276 Fifth Boulevard     40.66     -74.19            $15175        $30942     $71066           779                 3
+1998  1007           66              60        1954            2    Male   259 Valley Boulevard     40.24     -76.92            $25336        $54654     $27241           618                 1
+1999  1110           21              60        1998           11  Female  472 Ocean View Street     42.86     -71.48            $32325        $65909    $181261           673                 2
+============================================================
+
+============================================================
+FILE: turkey_bin_list.json
+Shape: (1875, 5)
+Columns: ['BIN', 'Network', 'Type', 'Category', 'Issuer']
+Dtypes:
+BIN         object
+Network     object
+Type        object
+Category    object
+Issuer      object
+Nulls: None
+First 3 rows:
+      BIN Network    Type  Category                    Issuer
+0  405040    VISA   DEBIT   CLASSIC  FUPS BANK ANONIM SIRKETI
+1  410431    VISA  CREDIT  BUSINESS  FUPS BANK ANONIM SIRKETI
+2  413791    VISA  CREDIT   CLASSIC  FUPS BANK ANONIM SIRKETI
+Last 3 rows:
+         BIN                    Network    Type Category Issuer
+1872  327979  DINERS CLUB INTERNATIONAL  CREDIT                
+1873  323626  DINERS CLUB INTERNATIONAL  CREDIT                
+1874  310422              PRIVATE LABEL                        
+============================================================
+
+FILE: lookups/mcc_codes.json
+  Type: dict, Keys: 15, Sample: ['5411', '5812', '5814', '5912', '5691']
+
+FILE: lookups/product_category_map.json
+  Type: dict, Keys: 9303, Sample: ['8*4 150 ML DEO DİSCOVERY', '8*4 150 ML DEO FOR MEN URBAN SPIRIT', '8*4 150 ML DEO FORMEN PLAY THE GAMR', '8*4 150 ML DEO HOLLY WOOD', '8*4 150 ML DEO LEMON RUSH']
+
+FILE: lookups/subscription_prices.json
+  Type: dict, Keys: 9, Sample: ['_source', '_last_updated', 'netflix', 'spotify', 'disney_plus']

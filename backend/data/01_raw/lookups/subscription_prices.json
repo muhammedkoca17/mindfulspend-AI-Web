@@ -1,0 +1,11 @@
+{
+  "_source": "Tamindir, Herm.io, Kepyo - Ocak-Mayis 2026. Fiyatlar degisebilir.",
+  "_last_updated": "2026-05-14",
+  "netflix": {"temel": 189.99, "standart": 289.99, "premium": 379.99},
+  "spotify": {"bireysel": 99.99, "ogrenci": 52.99, "duo": 139.99, "aile": 179.99},
+  "disney_plus": {"reklamli": 249.90, "reklamsiz": 449.90},
+  "youtube_premium": {"bireysel": 77.99, "aile": 159.99},
+  "blutv": {"standart": 109.90},
+  "exxen": {"standart": 149.90},
+  "gain": {"standart": 99.90}
+}

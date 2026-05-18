@@ -1,0 +1,2 @@
+# Trained model artifacts (.joblib) land here.
+# Run `python scripts/train_models.py` after data generation.

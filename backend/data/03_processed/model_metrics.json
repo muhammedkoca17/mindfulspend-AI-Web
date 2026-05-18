@@ -1,0 +1,23 @@
+{
+  "impulsive_model": {
+    "auc_train": 1.0,
+    "auc_val": 1.0,
+    "auc_test": 1.0
+  },
+  "budget_risk_model": {
+    "rmse": 0.0482,
+    "mae": 0.0382
+  },
+  "nudge_model": {
+    "auc": 0.5944,
+    "f1": 0.583
+  },
+  "training_data": {
+    "total_rows": 99457,
+    "date_trained": "2026-05-17",
+    "datasets_used": [
+      "customer_shopping_data.csv",
+      "online_retail_II.csv"
+    ]
+  }
+}

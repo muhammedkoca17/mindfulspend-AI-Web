@@ -1,0 +1,17 @@
+{
+  "5411": {"category": "market_temel_ihtiyac", "label": "Supermarket / Gida"},
+  "5812": {"category": "yemek_disari", "label": "Restoran"},
+  "5814": {"category": "yemek_disari", "label": "Fast Food"},
+  "5912": {"category": "saglik", "label": "Eczane"},
+  "5691": {"category": "giyim", "label": "Giyim Magazasi"},
+  "5732": {"category": "diger", "label": "Elektronik"},
+  "5977": {"category": "kisisel_bakim", "label": "Kozmetik"},
+  "5983": {"category": "ulasim", "label": "Akaryakit"},
+  "4121": {"category": "ulasim", "label": "Taksi"},
+  "4814": {"category": "fatura", "label": "Telekomunikasyon"},
+  "4900": {"category": "fatura", "label": "Kamu Hizmetleri"},
+  "7832": {"category": "eglence", "label": "Sinema"},
+  "8062": {"category": "saglik", "label": "Hastane"},
+  "5712": {"category": "diger", "label": "Mobilya"},
+  "6011": {"category": "diger", "label": "ATM"}
+}

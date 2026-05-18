@@ -1,0 +1,53 @@
+{
+  "impulsive_model": {
+    "day_of_week": 0.587,
+    "hour": 0.2234,
+    "is_essential": 0.1895,
+    "price": 0.0001,
+    "quantity": 0.0,
+    "is_weekend": 0.0,
+    "is_night": 0.0,
+    "is_high_value": 0.0,
+    "deviation_from_avg": 0.0,
+    "r_score": 0.0,
+    "f_score": 0.0,
+    "m_score": 0.0,
+    "rfm_score": 0.0,
+    "age": 0.0,
+    "amount_try": 0.0
+  },
+  "budget_risk_model": {
+    "amount_try": 0.4823,
+    "is_essential": 0.3821,
+    "day_of_week": 0.133,
+    "quantity": 0.0004,
+    "price": 0.0003,
+    "r_score": 0.0003,
+    "f_score": 0.0003,
+    "rfm_score": 0.0003,
+    "m_score": 0.0003,
+    "age": 0.0003,
+    "hour": 0.0003,
+    "is_weekend": 0.0,
+    "is_night": 0.0,
+    "is_high_value": 0.0,
+    "deviation_from_avg": 0.0
+  },
+  "nudge_model": {
+    "is_essential": 0.9294,
+    "hour": 0.0176,
+    "amount_try": 0.0069,
+    "m_score": 0.006,
+    "day_of_week": 0.006,
+    "r_score": 0.006,
+    "quantity": 0.0059,
+    "f_score": 0.0058,
+    "age": 0.0055,
+    "price": 0.0055,
+    "rfm_score": 0.0054,
+    "is_weekend": 0.0,
+    "is_night": 0.0,
+    "is_high_value": 0.0,
+    "deviation_from_avg": 0.0
+  }
+}
