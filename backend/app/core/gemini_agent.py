@@ -498,8 +498,9 @@ async def generate_nudge_fc(context: dict, db, user_id: int) -> dict:
 # ---------------------------------------------------------------------------
 async def chat_with_gemini(message: str, db, user_id: int) -> str:
     """Free-form chat with Gemini using Function Calling."""
-    from app.db.models import User, FixedExpense, Transaction
     from sqlalchemy import func
+
+    from app.db.models import FixedExpense, Transaction, User
 
     user = db.get(User, user_id)
     monthly_salary = user.monthly_salary if user else 0.0
