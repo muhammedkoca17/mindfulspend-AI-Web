@@ -1,9 +1,9 @@
-from app.core.gemini_agent import GeminiAgent
 from app.core.config import settings
+from app.core.gemini_agent import GeminiAgent
+
 
 def test_success_message_mock_discretionary():
     # Force settings mock mode to test mock logic
-    original_enabled = settings.gemini_api_key
     settings.gemini_api_key = "" # This disables Gemini call and forces mock
 
     agent = GeminiAgent()

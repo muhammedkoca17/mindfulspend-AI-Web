@@ -1,5 +1,5 @@
 """Smoke tests for the RFM scoring module."""
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 import pandas as pd
 
@@ -18,7 +18,7 @@ def test_weights_sum_to_one():
 
 
 def test_high_frequency_pushes_to_impulsive():
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     rows = [
         {
             "occurred_at": now - timedelta(hours=i),
@@ -33,7 +33,7 @@ def test_high_frequency_pushes_to_impulsive():
 
 
 def test_only_essential_spending_stays_safe():
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     rows = [
         {
             "occurred_at": now - timedelta(days=i),

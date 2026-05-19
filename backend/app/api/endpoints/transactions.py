@@ -35,7 +35,7 @@ def list_transactions(
 def recent_for_user(user_id: int, hours: int = 24, db: Session = Depends(get_db)):
     if not db.get(User, user_id):
         raise HTTPException(404, "User not found")
-    cutoff = datetime.now(UTC).replace(tzinfo=None)
+    datetime.now(UTC).replace(tzinfo=None)
     return (
         db.query(Transaction)
         .filter(Transaction.user_id == user_id)
@@ -80,12 +80,6 @@ def add_manual_transactions(
 
     # Try to get user from token, fall back to first user for demo
     user = None
-    try:
-
-        # Try auth if available
-        pass
-    except Exception:
-        pass
 
     if user is None:
         user = db.query(User).first()

@@ -73,7 +73,7 @@ def get_current_user(
         )
         user_id = int(payload.get("sub"))
     except (JWTError, ValueError, TypeError):
-        raise credentials_exception
+        raise credentials_exception from None
 
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
@@ -133,7 +133,7 @@ def register(data: UserRegister, db: Session = Depends(get_db)):
     except Exception as e:
         db.rollback()
         # Veritabanı hatası vb. olursa hatayı döndür
-        raise HTTPException(status_code=500, detail=f"Sunucu hatası: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Sunucu hatası: {str(e)}") from e
 
     return TokenResponse(
         access_token=create_access_token(user.id),

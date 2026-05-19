@@ -164,6 +164,7 @@ Sistemimiz `gemini-2.5-flash` modelini proaktif bir ajan olarak konumlandırır.
 3.  **`get_user_goals`**: Kullanıcının biriktirmeye çalıştığı aktif finansal hedefleri listeler.
 4.  **`calculate_goal_impact`**: Yapılacak isteğe bağlı harcamanın, kullanıcının hedefine ulaşmasını kaç gün geciktireceğini matematiksel olarak hesaplar.
 5.  **Dinamik Başarı/Geribildirim Mesajı (Alışveriş Tamamlandı)**: Alışveriş onaylandıktan sonra, satın alınan tüm ürünleri ve kategorileri analiz ederek kullanıcının isteğe bağlı ürün alıp almadığına göre Gemini ile kişiselleştirilmiş bir geribildirim mesajı üretir.
+6.  **Otonom Dürtme Tasarrufu ve Hedef Katkısı**: Kullanıcı sepetinden dürtme uyarısı sonrasında vazgeçtiği isteğe bağlı ürünleri çıkardığında, tasarruf edilen tutar (`saved_amount`) hesaplanarak kullanıcının öncelikli hedefine (`Goal.current_amount`) otomatik olarak eklenir ve başarı ekranında özel bir tebrik kartıyla sunulur.
 
 ### Güvenli Çevrimdışı Mod (Mock Fallback):
 FastAPI sunucumuz, `GEMINI_API_KEY` tanımlanmamışsa veya `USE_MOCK_GEMINI=true` ise deterministik bir **Behavioral Mock Engine** devreye sokar. Bu sayede sunucu ve ön yüz akışı kesilmeden, aynı psikolojik kurallara uyan Türkçe dürtmeler üretilmeye devam eder.

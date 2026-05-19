@@ -172,6 +172,8 @@ class Cart(Base):
     nudge_shown: Mapped[bool] = mapped_column(Boolean, default=False)
     nudge_accepted: Mapped[bool | None] = mapped_column(Boolean, nullable=True)
     nudge_message: Mapped[str | None] = mapped_column(Text, nullable=True)
+    nudge_discretionary_amount: Mapped[float] = mapped_column(Float, default=0.0)
+    saved_amount: Mapped[float] = mapped_column(Float, default=0.0)
 
     user: Mapped["User"] = relationship(back_populates="carts")
     items: Mapped[list["CartItem"]] = relationship(

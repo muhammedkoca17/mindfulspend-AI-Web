@@ -9,8 +9,7 @@ Sources:
 """
 from __future__ import annotations
 
-import json
-import os
+from sqlalchemy.orm import Session
 
 # ---------------------------------------------------------------------------
 # Main category hierarchy

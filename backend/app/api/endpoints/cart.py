@@ -339,6 +339,7 @@ def checkout_cart(
 
     cart.nudge_shown = True
     cart.nudge_message = nudge_message
+    cart.nudge_discretionary_amount = summary["discretionary_amount"]
     db.commit()
 
     return {
@@ -376,6 +377,14 @@ def confirm_checkout(
     goals = db.query(Goal).filter(Goal.user_id == user.id).order_by(Goal.priority).all()
     primary_goal = goals[0] if goals else None
     
+    # Calculate saved amount from nudge
+    saved_amount = 0.0
+    if cart.nudge_shown and cart.nudge_discretionary_amount > 0:
+        saved_amount = max(0.0, cart.nudge_discretionary_amount - summary["discretionary_amount"])
+        if saved_amount > 0 and primary_goal:
+            primary_goal.current_amount += saved_amount
+            db.add(primary_goal)
+
     # Calculate days delayed if any
     days_delayed = 0.0
     if primary_goal:
@@ -403,7 +412,8 @@ def confirm_checkout(
             for item in cart.items
         ],
         "goal_title": primary_goal.title if primary_goal else None,
-        "days_delayed": days_delayed
+        "days_delayed": days_delayed,
+        "saved_amount": saved_amount
     }
 
     agent = GeminiAgent()
@@ -417,6 +427,8 @@ def confirm_checkout(
         imp_score = ml["impulsive_score"]
 
     cart.nudge_accepted = decision.nudge_accepted
+    cart.nudge_discretionary_amount = cart.nudge_discretionary_amount
+    cart.saved_amount = saved_amount
     cart.status = "checked_out"
 
     now = datetime.now(UTC)
@@ -452,4 +464,8 @@ def confirm_checkout(
         "total_amount": total,
         "impulsive_score": round(imp_score, 4),
         "success_message": success_message,
+        "saved_amount": round(saved_amount, 2),
+        "goal_title": primary_goal.title if (primary_goal and saved_amount > 0) else None,
+        "goal_current_amount": round(primary_goal.current_amount, 2) if (primary_goal and saved_amount > 0) else None,
+        "goal_target_amount": round(primary_goal.target_amount, 2) if (primary_goal and saved_amount > 0) else None,
     }

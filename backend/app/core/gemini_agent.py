@@ -61,16 +61,19 @@ kullaniciya kisa, etkili, samimi ve kisisellestirilmis bir Turkce geribildirim (
 
 Kesin kurallar:
 1. Toplam yanit **en fazla 2 cumle** olmali.
-2. Eger sepetinde ISTEGE BAGLI (discretionary/non-essential) urunler varsa: "Tebrikler", "Hedefine yaklastin" \
+2. Eger kullanici nudge uyarisi sonrasi geri donup istege bagli urunleri sepetten cikardiysa (Tasarruf Edilen Tutar > 0 ise): \
+Kullaniciyi bu bilgece ve bilincli davranisindan oturu tebrik et. Vazgectigi tutarin (orn: "Tasarruf ettigin 450 TL...") \
+aktif hedefine (orn: "Yeni Araba hedefine...") eklendigini vurgulayarak hedefine olan hizli ilerleyisini tebrik et.
+3. Eger sepetinde ISTEGE BAGLI (discretionary/non-essential) urunler varsa: "Tebrikler", "Hedefine yaklastin" \
 tarzi genel tebrik kaliplarini kullanma. Bunun yerine, satin aldigi istege bagli urunleri \
 (orn: cips, akilli saat, cikolata) somut sekilde belirterek, bu harcamanin butcesine/hedeflerine olasi etkisini \
 hatirlat ve gelecek sefere daha secici olmasi icin dürüst ve destekleyici bir dille geri bildirim ver.
-3. Eger sepetinde SADECE TEMEL (essential) urunler varsa: Kullaniciyi bütçe bilinci ve disiplini icin samimiyetle \
+4. Eger sepetinde SADECE TEMEL (essential) urunler varsa (ve Tasarruf Edilen Tutar = 0 ise): Kullaniciyi bütçe bilinci ve disiplini icin samimiyetle \
 tebrik et, hedefine gercekten yaklastigini vurgula ve bu disiplinli davranisini ov.
-4. ASLA suclayici/yargilayici kelimeler kullanma (israf, hata, kotu karar vb. yasak). Destekleyici ve yol gosterici ol.
-5. Hazir/sabit kaliplar kullanma. Mesaj dogrudan sepetteki urunlere ve kategorilere ozel, dinamik olmalidir.
-6. Sayilari somut belirt (orn: "Bu alisveristeki 3.659 TL istege bagli harcama...").
-7. Emoji kullanma."""
+5. ASLA suclayici/yargilayici kelimeler kullanma (israf, hata, kotu karar vb. yasak). Destekleyici ve yol gosterici ol.
+6. Hazir/sabit kaliplar kullanma. Mesaj dogrudan sepetteki urunlere, kategorilere ve tasarruf edilen tutara ozel, dinamik olmalidir.
+7. Sayilari somut belirt (orn: "Bu alisveristeki 3.659 TL istege bagli harcama...").
+8. Emoji kullanma."""
 
 CHAT_SYSTEM_PROMPT = """\
 Sen MindfulSpend AI'nin finansal danismanisin.
@@ -610,14 +613,20 @@ class GeminiAgent:
         items = context.get("items", [])
         goal_title = context.get("goal_title")
         days_delayed = context.get("days_delayed", 0.0)
+        saved_amount = context.get("saved_amount", 0.0)
 
         # Separate items
-        essential_names = [i["name"] for i in items if i["is_essential"]]
+        [i["name"] for i in items if i["is_essential"]]
         discretionary_names = [i["name"] for i in items if not i["is_essential"]]
 
         is_mock = not settings.gemini_enabled
         if is_mock:
             # Fallback mock success message
+            if saved_amount > 0:
+                msg = f"Nudge uyarimizi dikkate alip istege bagli harcamalardan vazgecerek {saved_amount:.0f} TL tasarruf ettin!"
+                if goal_title:
+                    msg += f" Bu tutar '{goal_title}' hedefine aktarildi ve hedefine bir adim daha yaklastin."
+                return msg
             if discretionary_names:
                 item_names = ", ".join(discretionary_names[:3])
                 if len(discretionary_names) > 3:
@@ -648,6 +657,7 @@ class GeminiAgent:
                 f"Toplam Harcama: {total_amount:.2f} TL\n"
                 f"Temel Harcama: {essential_amount:.2f} TL\n"
                 f"Istege Bagli Harcama: {discretionary_amount:.2f} TL\n"
+                f"Tasarruf Edilen Tutar: {saved_amount:.2f} TL\n"
                 f"Hedef: {goal_title or 'Yok'}\n"
                 f"Hedef Erteleme: {days_delayed:.1f} gun\n\n"
                 f"Satin Alinan Urunler:\n{items_str}\n\n"
@@ -659,6 +669,11 @@ class GeminiAgent:
         except Exception as exc:
             log.warning("Gemini checkout success call failed (%s); using mock fallback", exc)
             # Re-run mock logic as fallback
+            if saved_amount > 0:
+                msg = f"Nudge uyarimizi dikkate alip istege bagli harcamalardan vazgecerek {saved_amount:.0f} TL tasarruf ettin!"
+                if goal_title:
+                    msg += f" Bu tutar '{goal_title}' hedefine aktarildi ve hedefine bir adim daha yaklastin."
+                return msg
             if discretionary_names:
                 item_names = ", ".join(discretionary_names[:3])
                 if len(discretionary_names) > 3:

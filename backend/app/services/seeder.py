@@ -8,8 +8,10 @@ Also preserves backward-compat `seed_if_empty` used by main.py lifespan.
 from __future__ import annotations
 
 import logging
+import os
 from datetime import date
 
+import pandas as pd
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
@@ -93,8 +95,6 @@ def seed_product_catalog(db: Session) -> None:
     if db.query(Product).count() > 0:
         return
 
-    import pandas as pd
-    import os
 
     excel_path = os.path.abspath(
         os.path.join(

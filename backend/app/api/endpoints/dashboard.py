@@ -1,15 +1,15 @@
-"""Dashboard analytics endpoints — spending breakdown, nudge success, goals, time risk."""
 from __future__ import annotations
 
 from collections import defaultdict
 from datetime import UTC, date, datetime, timedelta
 
 from fastapi import APIRouter, Depends
+from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
 from app.api.endpoints.auth import get_current_user
 from app.db.database import get_db
-from app.db.models import Goal, Transaction, User
+from app.db.models import FixedExpense, Goal, Transaction, User
 
 router = APIRouter(prefix="/dashboard", tags=["Dashboard"])
 
@@ -125,8 +125,6 @@ def time_risk(
         for risks in [hourly.get(h, [])]
     ]
 
-from app.db.models import FixedExpense
-
 
 @router.get("/fixed-expenses")
 def fixed_expenses(
@@ -146,10 +144,6 @@ def fixed_expenses(
         }
         for e in expenses
     ]
-
-
-
-from pydantic import BaseModel
 
 
 class FixedExpenseCreate(BaseModel):

@@ -119,11 +119,16 @@ def _normalize_payment(raw) -> str | float:
     if pd.isna(raw):
         return float("nan")
     s = str(raw).strip().lower().replace(" ", "_")
-    if s in {"card", "crd", "credit_card", "debit_card"}: return "card"
-    if s in {"cash", "csh"}:                              return "cash"
-    if "upi" in s:                                        return "upi"
-    if "bank" in s or "transfer" in s or "transfr" in s:  return "bank_transfer"
-    if "mobile" in s or "wallet" in s:                    return "mobile_wallet"
+    if s in {"card", "crd", "credit_card", "debit_card"}:
+        return "card"
+    if s in {"cash", "csh"}:
+        return "cash"
+    if "upi" in s:
+        return "upi"
+    if "bank" in s or "transfer" in s or "transfr" in s:
+        return "bank_transfer"
+    if "mobile" in s or "wallet" in s:
+        return "mobile_wallet"
     # Fuzzy fallback
     match = process.extractOne(s, _PAYMENT_MASTER, scorer=fuzz.WRatio)
     return match[0] if match and match[1] >= 70 else float("nan")
@@ -166,9 +171,12 @@ def derive_temporal_features(df: pd.DataFrame, date_col: str = "occurred_at") ->
     df["is_weekend"] = (df["dow"] >= 5).astype(int)
 
     def _bin(h: int) -> str:
-        if 5  <= h < 12: return "Morning"
-        if 12 <= h < 17: return "Afternoon"
-        if 17 <= h < 22: return "Evening"
+        if 5 <= h < 12:
+            return "Morning"
+        if 12 <= h < 17:
+            return "Afternoon"
+        if 17 <= h < 22:
+            return "Evening"
         return "LateNight"
     df["hour_bin"] = df["hour"].map(_bin)
     df["dow_sin"]   = np.sin(2 * np.pi * df["dow"]   / 7)

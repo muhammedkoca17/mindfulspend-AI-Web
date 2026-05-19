@@ -41,9 +41,12 @@ ML_FEATURE_COLUMNS = [
 
 
 def _hour_to_bin(h: int) -> int:
-    if 5  <= h < 12: return 0
-    if 12 <= h < 17: return 1
-    if 17 <= h < 22: return 2
+    if 5 <= h < 12:
+        return 0
+    if 12 <= h < 17:
+        return 1
+    if 17 <= h < 22:
+        return 2
     return 3
 
 

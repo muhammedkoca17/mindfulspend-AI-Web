@@ -145,6 +145,27 @@ export default function Cart() {
           </p>
         </div>
         
+        {/* Nudge Savings Success Card */}
+        {confirmResult.saved_amount > 0 && (
+          <div className="bg-gradient-to-r from-emerald-50 to-green-50/50 border-2 border-emerald-300 p-8 rounded-3xl text-left shadow-md relative overflow-hidden group animate-bounce-short">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-green-500/10 opacity-70"></div>
+            <div className="relative z-10 flex items-start gap-4">
+              <span className="text-4xl">🌟</span>
+              <div>
+                <h3 className="text-emerald-950 font-black text-xl mb-1">Harika Farkındalık!</h3>
+                <p className="text-emerald-900 text-base leading-relaxed font-semibold">
+                  Yapay zeka asistanının yönlendirmesine kulak verdin ve isteğe bağlı sepet kalemlerinden vazgeçerek <span className="text-emerald-700 font-extrabold text-lg bg-emerald-100/80 px-2 py-0.5 rounded border border-emerald-250">₺{confirmResult.saved_amount.toLocaleString()}</span> tasarruf ettin!
+                </p>
+                {confirmResult.goal_title && (
+                  <p className="text-emerald-800 text-sm mt-2 font-medium">
+                    Bu miktar <strong className="text-emerald-700 font-extrabold">"{confirmResult.goal_title}"</strong> hedefine otomatik olarak aktarıldı. Güncel birikim: <strong>₺{confirmResult.goal_current_amount?.toLocaleString()} / ₺{confirmResult.goal_target_amount?.toLocaleString()}</strong>
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Motivational Goal Message */}
         <div className="bg-white border border-emerald-200 p-8 rounded-3xl text-left shadow-sm relative overflow-hidden group">
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-500/5 opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
