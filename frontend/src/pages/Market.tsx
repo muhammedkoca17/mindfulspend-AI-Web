@@ -275,7 +275,10 @@ export default function Market() {
                </button>
             </div>
             
-            <div className="p-8 space-y-6 relative z-10">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleAddToCart(); }}
+              className="p-8 space-y-6 relative z-10"
+            >
               <div>
                 <div className="flex items-center gap-2 flex-wrap mb-2">
                   <span className="bg-emerald-50 text-emerald-700 text-[11px] px-3 py-1 rounded-full font-bold uppercase tracking-widest border border-emerald-200">
@@ -290,7 +293,7 @@ export default function Market() {
                 <h2 className="text-3xl font-bold font-display text-slate-900 leading-tight mb-2">{selectedProduct.name}</h2>
                 
                 {selectedProduct.category_name1 && (
-                  <p className="text-xs text-slate-400 font-medium tracking-wide">
+                  <p className="text-xs text-slate-450 font-medium tracking-wide">
                     {selectedProduct.category_name1} <span className="opacity-50">&gt;</span> {selectedProduct.category_name2} <span className="opacity-50">&gt;</span> {selectedProduct.category_name3}
                   </p>
                 )}
@@ -347,13 +350,13 @@ export default function Market() {
               </div>
 
               <button
-                onClick={handleAddToCart}
+                type="submit"
                 disabled={addingToCart || !quantity || Number(quantity) <= 0}
                 className="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white rounded-2xl font-bold text-lg flex justify-center items-center gap-3 transition-all duration-300 shadow-glow-green disabled:shadow-none hover:scale-[1.02] active:scale-95 cursor-pointer"
               >
                 {addingToCart ? 'Ekleniyor...' : <><ShoppingCart size={22} /> Sepete Ekle</>}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

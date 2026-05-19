@@ -336,7 +336,10 @@ export default function Goals() {
                 <X size={20} />
               </button>
             </div>
-            <div className="p-8 space-y-6">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleCreate(); }}
+              className="p-8 space-y-6"
+            >
               <div>
                 <label className="block text-slate-600 text-sm font-bold mb-2 uppercase tracking-wide">Hedef Adı</label>
                 <input
@@ -384,13 +387,13 @@ export default function Goals() {
                 </div>
               </div>
               <button
-                onClick={handleCreate}
+                type="submit"
                 disabled={saving || !addData.title || !addData.target_amount}
                 className="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white rounded-2xl font-bold text-lg transition-all duration-300 shadow-glow-green disabled:shadow-none hover:scale-[1.02] active:scale-95 cursor-pointer mt-4"
               >
                 {saving ? 'Oluşturuluyor...' : 'Hedefi Oluştur'}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}
@@ -405,7 +408,10 @@ export default function Goals() {
                 <X size={20} />
               </button>
             </div>
-            <div className="p-8 space-y-6">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleUpdate(); }}
+              className="p-8 space-y-6"
+            >
               <div className="bg-[#FAF9F6] p-5 rounded-2xl border border-slate-200 shadow-inner">
                 <p className="text-xs text-slate-450 font-bold uppercase tracking-widest mb-1">Hedef: {editGoal.title}</p>
                 <p className="text-3xl text-slate-900 font-black font-display tracking-tight">₺{editGoal.target_amount.toLocaleString()}</p>
@@ -422,18 +428,18 @@ export default function Goals() {
                   type="number"
                   value={editAmount}
                   onChange={e => setEditAmount(e.target.value)}
-                  className="w-full bg-[#FAF9F6] border border-slate-250 text-slate-900 text-3xl font-black font-display tracking-tight px-5 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-inner transition-all"
+                  className="w-full bg-[#FAF9F6] border border-slate-255 text-slate-900 text-3xl font-black font-display tracking-tight px-5 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none shadow-inner transition-all"
                   autoFocus
                 />
               </div>
               <button
-                onClick={handleUpdate}
+                type="submit"
                 disabled={saving}
                 className="w-full py-4.5 bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-450 hover:to-green-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white rounded-2xl font-bold text-lg transition-all duration-300 flex justify-center items-center gap-2 shadow-glow-green disabled:shadow-none hover:-translate-y-1 active:scale-95 mt-4 cursor-pointer"
               >
                 {saving ? 'Kaydediliyor...' : <><Check size={22} /> Güncelle</>}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}
@@ -448,7 +454,10 @@ export default function Goals() {
                 <X size={20} />
               </button>
             </div>
-            <div className="p-8 space-y-6">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleQuickAdd(); }}
+              className="p-8 space-y-6"
+            >
               <div className="bg-[#FAF9F6] p-5 rounded-2xl border border-slate-200 shadow-inner">
                 <p className="text-xs text-slate-450 font-bold uppercase tracking-widest mb-1">Hedef: {quickAddGoal.title}</p>
                 <div className="flex items-baseline gap-2">
@@ -489,13 +498,13 @@ export default function Goals() {
               )}
 
               <button
-                onClick={() => handleQuickAdd()}
+                type="submit"
                 disabled={saving || !quickAddAmount}
                 className="w-full py-4.5 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white rounded-2xl font-bold text-lg transition-all duration-300 flex justify-center items-center gap-2 shadow-glow-green disabled:shadow-none hover:-translate-y-1 active:scale-95 mt-4 cursor-pointer"
               >
                 {saving ? 'Ekleniyor...' : <><Check size={22} /> Birikimi Ekle</>}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

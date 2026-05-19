@@ -210,7 +210,10 @@ export default function Profile() {
             )}
           </div>
           {editingSalary ? (
-            <div className="flex items-center gap-3">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleSalaryUpdate(); }}
+              className="flex items-center gap-3 w-full"
+            >
               <div className="relative flex-1">
                 <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xl text-slate-400 font-bold">₺</span>
                 <input
@@ -222,19 +225,20 @@ export default function Profile() {
                 />
               </div>
               <button
-                onClick={handleSalaryUpdate}
+                type="submit"
                 disabled={salaryLoading}
                 className="p-3 bg-emerald-650 hover:bg-emerald-600 text-white rounded-xl transition cursor-pointer"
               >
                 <Check size={20} />
               </button>
               <button
+                type="button"
                 onClick={() => setEditingSalary(false)}
                 className="p-3 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition cursor-pointer"
               >
                 <X size={20} />
               </button>
-            </div>
+            </form>
           ) : (
             <p className="text-4xl font-black font-display text-emerald-650">₺{(user.monthly_salary || 0).toLocaleString()}</p>
           )}
@@ -364,7 +368,10 @@ export default function Profile() {
               </button>
             </div>
             
-            <div className="p-6 space-y-5">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleSave(); }}
+              className="p-6 space-y-5"
+            >
               <div>
                 <label className="block text-slate-600 text-sm font-bold mb-2">Gider Adı</label>
                 <input
@@ -380,11 +387,11 @@ export default function Profile() {
                 <div>
                   <label className="block text-slate-600 text-sm font-bold mb-2">Tutar (₺)</label>
                   <input
-                    type="number"
-                    value={modalData.amount}
-                    onChange={e => setModalData({...modalData, amount: e.target.value})}
-                    placeholder="229.99"
-                    className="w-full bg-[#FAF9F6] border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none font-bold"
+                     type="number"
+                     value={modalData.amount}
+                     onChange={e => setModalData({...modalData, amount: e.target.value})}
+                     placeholder="229.99"
+                     className="w-full bg-[#FAF9F6] border border-slate-200 text-slate-900 px-4 py-3 rounded-xl focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 outline-none font-bold"
                   />
                 </div>
                 <div>
@@ -417,13 +424,13 @@ export default function Profile() {
               </div>
 
               <button
-                onClick={handleSave}
+                type="submit"
                 disabled={saving || !modalData.name || !modalData.amount}
                 className="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 disabled:from-slate-200 disabled:to-slate-200 disabled:text-slate-400 text-white rounded-xl font-bold text-lg transition shadow-glow-green cursor-pointer"
               >
                 {saving ? 'Kaydediliyor...' : (editingId ? 'Güncelle' : 'Ekle')}
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}
@@ -439,7 +446,10 @@ export default function Profile() {
               </button>
             </div>
             
-            <div className="p-6 space-y-5">
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleProfileSave(); }}
+              className="p-6 space-y-5"
+            >
               <div>
                 <label className="block text-slate-600 text-sm font-bold mb-2">Ad Soyad</label>
                 <input
@@ -476,12 +486,12 @@ export default function Profile() {
               </div>
 
               <button
-                onClick={handleProfileSave}
+                type="submit"
                 className="w-full py-4 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white rounded-xl font-bold text-lg transition shadow-glow-green cursor-pointer"
               >
                 Kaydet
               </button>
-            </div>
+            </form>
           </div>
         </div>
       )}

@@ -115,12 +115,14 @@ export default function Onboarding() {
                   <div className="relative">
                     <span className="absolute left-5 top-1/2 -translate-y-1/2 text-2xl text-emerald-600 font-black">₺</span>
                     <input type="number" value={salary} onChange={e => setSalary(e.target.value)} placeholder="50000"
+                      onKeyDown={(e) => { if (e.key === 'Enter' && salary && age) setStep(2); }}
                       className="w-full bg-[#FAF9F6] border border-slate-200 focus:border-emerald-500 text-slate-900 text-3xl font-black font-display py-4 pl-14 pr-4 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner placeholder:text-slate-300 tracking-tight" />
                   </div>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2.5">Yaşınız</label>
                   <input type="number" value={age} onChange={e => setAge(e.target.value)} placeholder="30"
+                    onKeyDown={(e) => { if (e.key === 'Enter' && salary && age) setStep(2); }}
                     className="w-full bg-[#FAF9F6] border border-slate-200 focus:border-emerald-500 text-slate-900 text-3xl font-black font-display py-4 px-5 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/10 transition-all shadow-inner placeholder:text-slate-300 tracking-tight" />
                 </div>
               </div>
@@ -216,12 +218,14 @@ export default function Onboarding() {
                       {selectedGoalCat === 'car' ? 'Nasıl bir araba düşünüyorsun?' : selectedGoalCat === 'vacation' ? 'Nereye gitmek istiyorsun?' : selectedGoalCat === 'home' ? 'Nasıl bir ev hayal ediyorsun?' : 'Hedefine kısa bir isim ver'}
                     </label>
                     <input type="text" value={goalTitle} onChange={e => setGoalTitle(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === 'Enter' && goalTitle && goalAmount) setStep(4); }}
                       placeholder={selectedGoalCat === 'car' ? 'Örn: Kırmızı BMW M3' : selectedGoalCat === 'vacation' ? 'Örn: Antalya Tatili' : selectedGoalCat === 'home' ? 'Örn: Deniz Manzaralı Ev' : 'Örn: Acil Durum Fonu'}
                       className="w-full bg-[#FAF9F6] border border-slate-200 focus:border-emerald-500 text-slate-900 px-4 py-3.5 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/10 transition-all font-medium placeholder:text-slate-400" />
                   </div>
                   <div>
                     <label className="block text-xs font-bold text-slate-500 uppercase tracking-widest mb-2.5">Hedef Bütçe (₺)</label>
                     <input type="number" value={goalAmount} onChange={e => setGoalAmount(e.target.value)} placeholder="200000"
+                      onKeyDown={(e) => { if (e.key === 'Enter' && goalTitle && goalAmount) setStep(4); }}
                       className="w-full bg-[#FAF9F6] border border-slate-200 focus:border-emerald-500 text-slate-900 text-3xl font-black font-display px-4 py-4 rounded-2xl outline-none focus:ring-2 focus:ring-emerald-500/10 transition-all placeholder:text-slate-300 tracking-tight" />
                   </div>
                 </div>
