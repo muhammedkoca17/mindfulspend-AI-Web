@@ -25,6 +25,20 @@ Geleneksel bütçe uygulamaları **geçmişe dönük** raporlar sunar. MindfulSp
 
 ---
 
+## 💡 Orijinal Vizyon ve Mevcut Uygulama (Mevcut vs. Gelecek Yol Haritası)
+
+### 📌 Orijinal Fikir (Gelecek Yol Haritası)
+MindfulSpend AI'ın asıl vizyonu, bağımsız bir e-ticaret sepeti barındırmak yerine; **Trendyol, Hepsiburada, Amazon** gibi büyük e-ticaret devleriyle entegre çalışan (örneğin bir tarayıcı eklentisi veya API aracılığıyla) otonom bir yapıya sahip olmaktır. 
+Kullanıcı bu harici platformlarda alışveriş yaparken, ürünü sepetine eklediğinde ve ödeme adımına ilerlemeye çalıştığında sistem arka planda devreye girer. Alınacak ürünün pahalı, gereksiz veya dürtüsel (anlık haz ve tatmin odaklı) olup olmadığını analiz eder ve ödeme onayından hemen önce kullanıcıyı hedeflerine yönlendirecek akıllı dürtmeler (nudge) üretir.
+
+### 🚀 Mevcut Uygulama (Prototip ve Simülasyon)
+Bu vizyonun ilk aşaması ve teknik kanıtı (PoC) olarak, MindfulSpend AI projesinde **kendi Sanal Market ve Sepetim modüllerimizi** geliştirdik. Sistem:
+*   Kullanıcının harici platformlardaki sepet deneyimini simüle etmek için binlerce enflasyon ayarlı gerçek ürün içeren **Sanal Market** sunar.
+*   Ürünler sepete eklenip **Sepetim** sayfasından ödeme aşamasına geçilirken, XGBoost modelleri ve Gemini Live Ajanı tarafından anlık bütçe analizi gerçekleştirilir.
+*   Böylece, büyük e-ticaret siteleriyle yapılması planlanan entegrasyonun algoritması, veritabanı yapısı ve yapay zeka karar motoru çalışır bir prototip halinde tamamen hazır hale getirilmiştir.
+
+---
+
 ## 🏗️ Mimari Genel Bakış
 
 ```

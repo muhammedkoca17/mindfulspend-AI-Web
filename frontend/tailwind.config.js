@@ -19,10 +19,11 @@ export default {
         }
       },
       boxShadow: {
-        glow: '0 0 24px rgba(99, 102, 241, 0.25)',
-        'glow-purple': '0 0 30px rgba(168, 85, 247, 0.4)',
-        card: '0 1px 0 rgba(255,255,255,0.04) inset, 0 8px 24px rgba(0,0,0,0.35)',
-        'glass': '0 4px 30px rgba(0, 0, 0, 0.1)',
+        glow: '0 0 24px rgba(22, 163, 74, 0.15)',
+        'glow-purple': '0 0 30px rgba(22, 163, 74, 0.25)',
+        'glow-green': '0 0 35px rgba(22, 163, 74, 0.35)',
+        card: '0 10px 30px -10px rgba(0,0,0,0.06), 0 1px 3px rgba(0,0,0,0.02)',
+        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.04), inset 0 1px 0 0 rgba(255, 255, 255, 0.60)',
       },
       animation: {
         'pulse-soft': 'pulse-soft 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',

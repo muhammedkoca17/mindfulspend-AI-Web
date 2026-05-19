@@ -13,7 +13,7 @@ import Layout from './components/Layout';
 
 const PrivateRoute = ({ children }: any) => {
   const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
+  return token ? children : <Navigate to="/" />;
 };
 
 export default function App() {
