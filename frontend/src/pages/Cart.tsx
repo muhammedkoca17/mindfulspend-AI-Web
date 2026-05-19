@@ -135,7 +135,7 @@ export default function Cart() {
         {/* Motivational Goal Message */}
         <div className="bg-gradient-to-r from-purple-500/10 to-indigo-500/10 border border-purple-500/30 p-6 rounded-2xl text-left">
           <p className="text-purple-300 text-lg leading-relaxed">
-            🎯 {user.full_name || 'Kullanıcı'}, hedefine bir adım daha yaklaştın! Her bilinçli harcama seni hayallerine biraz daha yaklaştırır. Harcamalarını Dashboard'dan takip etmeyi unutma.
+            🎯 {confirmResult.success_message || `${user.full_name || 'Kullanıcı'}, hedefine bir adım daha yaklaştın! Her bilinçli harcama seni hayallerine biraz daha yaklaştırır. Harcamalarını Dashboard'dan takip etmeyi unutma.`}
           </p>
         </div>
 

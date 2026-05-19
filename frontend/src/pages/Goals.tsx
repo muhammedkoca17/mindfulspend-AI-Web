@@ -35,6 +35,10 @@ export default function Goals() {
   const [editGoal, setEditGoal] = useState<GoalData | null>(null);
   const [editAmount, setEditAmount] = useState('');
 
+  // Quick Add modal
+  const [quickAddGoal, setQuickAddGoal] = useState<GoalData | null>(null);
+  const [quickAddAmount, setQuickAddAmount] = useState('');
+
   const user = JSON.parse(localStorage.getItem('user') || '{}');
 
   useEffect(() => {
@@ -84,6 +88,29 @@ export default function Goals() {
       await loadGoals();
     } catch {
       alert('Güncelleme başarısız.');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleQuickAdd = async (amountToAdd?: number) => {
+    const targetGoal = quickAddGoal;
+    if (!targetGoal) return;
+    
+    let val = amountToAdd;
+    if (val === undefined) {
+      val = parseFloat(quickAddAmount);
+    }
+    
+    if (isNaN(val) || val <= 0) return;
+    setSaving(true);
+    try {
+      const newAmount = targetGoal.current_amount + val;
+      await updateGoal(targetGoal.id, { current_amount: newAmount });
+      setQuickAddGoal(null);
+      await loadGoals();
+    } catch {
+      alert('Birikim eklenemedi.');
     } finally {
       setSaving(false);
     }
@@ -221,11 +248,23 @@ export default function Goals() {
 
                 {/* Amount details */}
                 <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-gray-900 p-3 rounded-xl">
-                    <p className="text-xs text-gray-500 mb-1">Biriken</p>
+                  <div className="bg-gray-900 p-3 rounded-xl flex flex-col justify-between">
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-xs text-gray-500">Biriken</span>
+                      <button
+                        onClick={() => {
+                          setQuickAddGoal(goal);
+                          setQuickAddAmount('');
+                        }}
+                        className="bg-green-500/20 hover:bg-green-500 text-green-400 hover:text-white p-1 rounded transition"
+                        title="Birikim Ekle (+)"
+                      >
+                        <Plus size={14} />
+                      </button>
+                    </div>
                     <p className="text-lg font-bold text-green-400">₺{goal.current_amount.toLocaleString()}</p>
                   </div>
-                  <div className="bg-gray-900 p-3 rounded-xl">
+                  <div className="bg-gray-900 p-3 rounded-xl flex flex-col justify-between">
                     <p className="text-xs text-gray-500 mb-1">Kalan</p>
                     <p className="text-lg font-bold text-orange-400">₺{Math.max(0, remaining).toLocaleString()}</p>
                   </div>
@@ -374,6 +413,65 @@ export default function Goals() {
                 className="w-full py-4 bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white rounded-xl font-bold text-lg transition flex justify-center items-center gap-2"
               >
                 {saving ? 'Kaydediliyor...' : <><Check size={20} /> Güncelle</>}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Add Modal (+ Birikim Ekle) */}
+      {quickAddGoal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-white">➕ Birikim Ekle</h3>
+              <button onClick={() => setQuickAddGoal(null)} className="text-gray-500 hover:text-white transition">
+                <X size={24} />
+              </button>
+            </div>
+            <div className="p-6 space-y-5">
+              <div className="bg-gray-800 p-4 rounded-xl">
+                <p className="text-sm text-gray-400 mb-1">Hedef: {quickAddGoal.title}</p>
+                <p className="text-lg text-white font-bold">₺{quickAddGoal.current_amount.toLocaleString()} / ₺{quickAddGoal.target_amount.toLocaleString()}</p>
+                <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+                  <div
+                    className="bg-purple-500 h-2 rounded-full"
+                    style={{ width: `${Math.min(quickAddGoal.progress_percent, 100)}%` }}
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-gray-300 text-sm font-medium mb-2">Eklenecek Birikim Tutarı (₺)</label>
+                <input
+                  type="number"
+                  value={quickAddAmount}
+                  onChange={e => setQuickAddAmount(e.target.value)}
+                  placeholder="Miktar girin (örn: 1000)"
+                  className="w-full bg-gray-800 border border-gray-700 text-white text-2xl font-bold px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                  autoFocus
+                />
+              </div>
+
+              {quickAddGoal.target_amount - quickAddGoal.current_amount > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    const remaining = quickAddGoal.target_amount - quickAddGoal.current_amount;
+                    setQuickAddAmount(String(remaining));
+                  }}
+                  className="w-full py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-xl font-bold text-sm transition"
+                >
+                  🎯 Hedefi Doğrudan Tamamla (+₺{(quickAddGoal.target_amount - quickAddGoal.current_amount).toLocaleString()})
+                </button>
+              )}
+
+              <button
+                onClick={() => handleQuickAdd()}
+                disabled={saving || !quickAddAmount}
+                className="w-full py-4 bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white rounded-xl font-bold text-lg transition flex justify-center items-center gap-2"
+              >
+                {saving ? 'Ekleniyor...' : <><Check size={20} /> Birikim Ekle</>}
               </button>
             </div>
           </div>

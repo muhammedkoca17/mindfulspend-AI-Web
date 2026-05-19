@@ -124,7 +124,8 @@ Combines:
 4. `GeminiAgent.generate_nudge()` invokes Function Calling with 4 tools
 5. Gemini reads real user data and generates personalized nudge
 6. User sees nudge popup → accepts (remove items) or rejects (proceed)
-7. `POST /cart/checkout/confirm` creates Transaction rows for each item
+7. `POST /cart/checkout/confirm` generates a dynamic success feedback message using Gemini (based on actual cart items/categories) and creates Transaction rows for each item
+8. Receipt screen displays the dynamic AI feedback message
 
 ---
 
@@ -490,7 +491,7 @@ interface NudgeResponse {
 |---------|--------|----------------|----------------|
 | **customer_shopping_data.csv** | CSV | Turkish shopper demographics, malls, age/gender variables, price/quantity | Kaggle Shopping Dataset |
 | **online_retail_II.csv** | CSV | Real-world online retail transaction items, GBP amounts converted to TRY (40x) | Kaggle Online Retail II |
-| **market_sales.xlsx** | Excel | High-density supermarket basket data and essential/discretionary frequency tracking | Supermarket Sales |
+| **product_catalog_updated_2026.xlsx** | Excel | 9,367 items with 2026 inflation-adjusted prices (12.44x multiplier) and necessity classifications | 2026 Updated Market Catalog |
 | **cards_data.csv** | CSV | Credit/debit card types, bank BIN prefixes and processing limits | Local cards db |
 | **users_data.csv** | CSV | Demographic data for user profiling and baseline aggregates | User profiles |
 | **turkey_bin_list.json** | JSON | Standard Turkish Bank BIN numbers, card brand and type metadata | Turkish BIN List |
@@ -503,7 +504,7 @@ interface NudgeResponse {
 Files:
 - `customer_shopping_data.csv` — Shopper transactions (age, gender, mall, payment method)
 - `online_retail_II.csv` — Retail transactional item rows (quantity, price, customer ID)
-- `market_sales.xlsx` — Supermarket basket itemizations
+- `product_catalog_updated_2026.xlsx` — 2026 inflation-adjusted product catalog (9,367 items)
 - `cards_data.csv` — Card brands and type information
 - `users_data.csv` — User demographic profiles
 - `turkey_bin_list.json` — Turkey Bank Identification Number mappings
@@ -762,11 +763,14 @@ User clicks "Öde" (checkout):
   User decides:
   [A] Accept nudge → POST /cart/checkout/confirm with nudge_accepted=true
       → Backend removes discretionary items
+      → Generates dynamic praise feedback via Gemini for buying only essential items
       → Creates Transaction rows only for essential items
-      → Redirect to receipt
+      → Redirect to receipt displaying dynamic AI message
   [B] Reject nudge → POST /cart/checkout/confirm with nudge_accepted=false
       → Backend creates Transaction rows for ALL items
+      → Generates dynamic warning/critical feedback via Gemini naming the optional items purchased and their budget/goal impact
       → Still records nudge_accepted=false for learning
+      → Redirect to receipt displaying dynamic AI message
 ```
 
 #### 7. Goal Tracking
@@ -774,8 +778,8 @@ User clicks "Öde" (checkout):
 User sets goal: "Tatil Fonu, 10,000 TRY target by Dec 31"
   POST /goals/ {title: "Tatil Fonu", target_amount: 10000, target_date: "2026-12-31"}
   
-User logs transactions (spending) OR adds savings manually
-  PATCH /goals/1 {current_amount: 500}  (after saving)
+User logs transactions (spending) OR adds savings manually (using the quick '+' increment button or direct goal completion button)
+  PATCH /goals/1 {current_amount: 500}  (after saving or incrementing)
   
 Dashboard shows:
   • Progress bar: 500 / 10,000 (5%)

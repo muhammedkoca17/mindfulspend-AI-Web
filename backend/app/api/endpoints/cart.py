@@ -358,6 +358,46 @@ def confirm_checkout(
     if not cart.items:
         raise HTTPException(status_code=400, detail="Sepet bos")
 
+    # Generate success feedback message before changing status/emptying cart
+    summary = _calculate_cart_summary(cart)
+    
+    # User goals
+    goals = db.query(Goal).filter(Goal.user_id == user.id).order_by(Goal.priority).all()
+    primary_goal = goals[0] if goals else None
+    
+    # Calculate days delayed if any
+    days_delayed = 0.0
+    if primary_goal:
+        remaining = primary_goal.target_amount - primary_goal.current_amount
+        if remaining > 0:
+            if primary_goal.target_date:
+                days_left = max((primary_goal.target_date - date.today()).days, 1)
+                daily_needed = remaining / days_left
+            else:
+                daily_needed = remaining / 90
+            days_delayed = round(summary["discretionary_amount"] / daily_needed, 1) if daily_needed > 0 else 0
+
+    success_context = {
+        "user_name": user.full_name or "Kullanici",
+        "total_amount": summary["total_amount"],
+        "essential_amount": summary["essential_amount"],
+        "discretionary_amount": summary["discretionary_amount"],
+        "items": [
+            {
+                "name": item.product.name,
+                "category": item.product.category,
+                "is_essential": item.product.is_essential,
+                "total_price": item.total_price
+            }
+            for item in cart.items
+        ],
+        "goal_title": primary_goal.title if primary_goal else None,
+        "days_delayed": days_delayed
+    }
+
+    agent = GeminiAgent()
+    success_message = agent.generate_checkout_success_message(success_context)
+
     # Get ML scores for metadata
     imp_score = 0.0
     if is_models_ready():
@@ -400,4 +440,5 @@ def confirm_checkout(
         "transaction_count": len(created),
         "total_amount": total,
         "impulsive_score": round(imp_score, 4),
+        "success_message": success_message,
     }

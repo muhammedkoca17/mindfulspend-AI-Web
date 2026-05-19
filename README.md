@@ -77,8 +77,8 @@ MindfulSpend AI, uydurma veriler yerine **gerçek tüketici harcama modelleri ve
     Türk tüketicilerinin demografik özelliklerini (yaş, cinsiyet), alışveriş konumlarını, harcama miktarlarını, ödeme yöntemlerini ve kategorilerini barındıran zengin veri tabanı.
 2.  **`online_retail_II.csv` (Online Perakende Verisi):** 
     2009-2011 yılları arasındaki gerçek işlem satırları. GBP (İngiliz Sterlini) cinsinden olan fiyatlar, pipeline üzerinde `40.0` çarpanıyla güncel TRY değerine dönüştürülmüştür.
-3.  **`market_sales.xlsx` (Süpermarket Satış Verisi):** 
-    Süpermarket sepet yapıları ve temel gıda harcamalarının sıklık analizi için kullanılan Excel veri tabanı.
+3.  **`product_catalog_updated_2026.xlsx` (2026 Enflasyon Ayarlı Ürün Kataloğu):** 
+    2017 market verilerinden kümülatif 12.44x enflasyon çarpanı uygulanarak oluşturulmuş, 9,367 benzersiz ürün içeren ve sanal market sepetlerinde aktif olarak kullanılan güncel ürün veri tabanı.
 4.  **`cards_data.csv` & `users_data.csv`:** 
     Kullanıcıların kart tipleri (debit/credit), banka ilişkileri ve demografik bütçe profilleri.
 5.  **`turkey_bin_list.json` (Türkiye BIN Listesi):** 
@@ -144,11 +144,12 @@ Burada her bir bileşen ($R, F, M$) 30 günlük hareketli pencerelerde 1 ile 5 a
 
 Sistemimiz `gemini-2.5-flash` modelini proaktif bir ajan olarak konumlandırır. Sepet onaylama (checkout) ekranında Gemini, kullanıcının gerçek finansal verilerini sorgulamak ve analiz etmek için **otonom olarak 4 farklı fonksiyonu (aracı) çağırabilir**:
 
-### Gemini Ajanının Kullanabildiği Fonksiyonlar (Tools):
+### Gemini Ajanının Kullanabildiği Fonksiyonlar ve Özellikler:
 1.  **`get_user_financial_state`**: Kullanıcının aylık net gelirini, sabit giderlerini ve risk profilini çeker.
 2.  **`get_cart_analysis`**: Alışveriş sepetindeki temel ve isteğe bağlı ürünlerin tutar dağılımını hesaplar.
 3.  **`get_user_goals`**: Kullanıcının biriktirmeye çalıştığı aktif finansal hedefleri listeler.
 4.  **`calculate_goal_impact`**: Yapılacak isteğe bağlı harcamanın, kullanıcının hedefine ulaşmasını kaç gün geciktireceğini matematiksel olarak hesaplar.
+5.  **Dinamik Başarı/Geribildirim Mesajı (Alışveriş Tamamlandı)**: Alışveriş onaylandıktan sonra, satın alınan tüm ürünleri ve kategorileri analiz ederek kullanıcının isteğe bağlı ürün alıp almadığına göre Gemini ile kişiselleştirilmiş bir geribildirim mesajı üretir.
 
 ### Güvenli Çevrimdışı Mod (Mock Fallback):
 FastAPI sunucumuz, `GEMINI_API_KEY` tanımlanmamışsa veya `USE_MOCK_GEMINI=true` ise deterministik bir **Behavioral Mock Engine** devreye sokar. Bu sayede sunucu ve ön yüz akışı kesilmeden, aynı psikolojik kurallara uyan Türkçe dürtmeler üretilmeye devam eder.
@@ -160,6 +161,7 @@ FastAPI sunucumuz, `GEMINI_API_KEY` tanımlanmamışsa veya `USE_MOCK_GEMINI=tru
 *   **RFM Zaman Serisi Analizi:** Kullanıcının son 2 aydaki finansal davranış değişimini kronolojik olarak gösteren, risk puanı seyrini (Area Chart) ve alt bileşen skorlarını (Line Chart) Recharts ile görselleştiren özel analitik ekranı.
 *   **Sanal Market (Virtual Market):** Dürtüsel harcamanın harcama anında nasıl engellendiğini jüriye canlı göstermek için tasarlanan ürün sepeti ve checkout simülasyonu.
 *   **Canlı Gemini Chat Asistanı (✨):** Ekranın sağ altında yer alan parıltılı asistan butonu. Kullanıcıyla canlı konuşur, bütçesini sorgular ve finansal hedeflerine ulaşması için öneriler sunar.
+*   **Hızlı Birikim & Hedef Ekleme (+):** Hedefler ekranında, kullanıcıların hedeflerine hızlı bir şekilde birikim ekleyebilmeleri için pratik bir artı (`+`) butonu ve hedefi doğrudan tamamlayarak %100 yapabilecekleri tek tıkla hedef tamamlama seçeneği sunar.
 
 ---
 
@@ -211,8 +213,10 @@ FastAPI sunucumuz, `GEMINI_API_KEY` tanımlanmamışsa veya `USE_MOCK_GEMINI=tru
 
 5.  **FastAPI Sunucusunu Başlatın:**
     ```powershell
-    uvicorn app.main:app --reload --port 8000
+    python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
     ```
+    > [!IMPORTANT]
+    > Windows işletim sistemlerinde `localhost` varsayılan olarak IPv6 (`[::1]`) adresine çözümlenebilir. Uyuşmazlık kaynaklı **"Network Error"** hatalarını engellemek için sunucuyu her zaman yukarıdaki gibi `--host 127.0.0.1` parametresiyle başlatın.
 
 ---
 
@@ -224,7 +228,10 @@ cd frontend
 npm install
 npm run dev
 ```
-Uygulama tarayıcınızda **`http://localhost:5173`** adresinde açılacaktır.
+Uygulama tarayıcınızda varsayılan olarak `http://localhost:5173` adresinde açılacaktır. 
+
+> [!TIP]
+> Eğer tarayıcıda giriş veya kayıt esnasında **"Network Error"** alırsanız, tarayıcınızın adres satırına doğrudan **`http://127.0.0.1:5173`** yazarak giriş yapın ve sayfayı **Ctrl + F5** ile yenileyin. Bu, IPv4 ağ arabirimi üzerinden sorunsuz iletişimi garanti eder.
 
 ---
 

@@ -54,47 +54,38 @@ Last 3 rows:
 ============================================================
 
 ============================================================
-FILE: market_sales.xlsx
-Shape: (611108, 26)
-Columns: ['ID', 'ITEMCODE', 'ITEMNAME', 'FICHENO', 'DATE_', 'AMOUNT', 'PRICE', 'LINENETTOTAL', 'LINENET', 'BRANCHNR', 'BRANCH', 'SALESMAN', 'CITY', 'REGION', 'LATITUDE', 'LONGITUDE', 'CLIENTCODE', 'CLIENTNAME', 'BRANDCODE', 'BRAND', 'CATEGORY_NAME1', 'CATEGORY_NAME2', 'CATEGORY_NAME3', 'STARTDATE', 'ENDDATE', 'GENDER']
+FILE: product_catalog_updated_2026.xlsx
+Shape: (9367, 17)
+Columns: ['ITEMCODE', 'ITEMNAME', 'PRICE', 'CATEGORY_NAME1', 'CATEGORY_NAME2', 'CATEGORY_NAME3', 'BRAND', 'total_sold', 'price_tier_global', 'price_tier_category', 'necessity_auto', 'necessity_final', 'popularity', 'PRICE_2017', 'PRICE_2026', 'price_tier_global_2026', 'price_tier_category_2026']
 Dtypes:
-ID                       float64
-ITEMCODE                 float64
-ITEMNAME                  object
-FICHENO                    int64
-DATE_             datetime64[ns]
-AMOUNT                   float64
-PRICE                    float64
-LINENETTOTAL             float64
-LINENET                  float64
-BRANCHNR                 float64
-BRANCH                    object
-SALESMAN                  object
-CITY                      object
-REGION                    object
-LATITUDE                 float64
-LONGITUDE                float64
-CLIENTCODE                object
-CLIENTNAME                object
-BRANDCODE                 object
-BRAND                     object
-CATEGORY_NAME1            object
-CATEGORY_NAME2            object
-CATEGORY_NAME3            object
-STARTDATE         datetime64[ns]
-ENDDATE           datetime64[ns]
-GENDER                    object
-Nulls: {'ID': 1, 'ITEMCODE': 7167, 'ITEMNAME': 7167, 'DATE_': 1, 'AMOUNT': 1, 'PRICE': 1, 'LINENETTOTAL': 1, 'LINENET': 1, 'BRANCHNR': 1, 'BRANCH': 1, 'CITY': 1, 'REGION': 1, 'LATITUDE': 1, 'LONGITUDE': 1, 'CLIENTCODE': 18348, 'CLIENTNAME': 18365, 'BRANDCODE': 35557, 'BRAND': 35557, 'CATEGORY_NAME1': 7167, 'CATEGORY_NAME2': 27660, 'CATEGORY_NAME3': 209459, 'GENDER': 18365}
+ITEMCODE                      int64
+ITEMNAME                     object
+PRICE                       float64
+CATEGORY_NAME1               object
+CATEGORY_NAME2               object
+CATEGORY_NAME3               object
+BRAND                        object
+total_sold                  float64
+price_tier_global            object
+price_tier_category          object
+necessity_auto               object
+necessity_final              object
+popularity                   object
+PRICE_2017                  float64
+PRICE_2026                  float64
+price_tier_global_2026       object
+price_tier_category_2026     object
+Nulls: {'CATEGORY_NAME2': 285, 'CATEGORY_NAME3': 1778, 'BRAND': 99}
 First 3 rows:
-        ID  ITEMCODE                         ITEMNAME  FICHENO      DATE_  AMOUNT  PRICE  LINENETTOTAL  LINENET  BRANCHNR           BRANCH      SALESMAN      CITY   REGION  LATITUDE  LONGITUDE CLIENTCODE      CLIENTNAME BRANDCODE   BRAND CATEGORY_NAME1   CATEGORY_NAME2      CATEGORY_NAME3           STARTDATE             ENDDATE GENDER
-0  11738.0    5863.0  SPRITE 1 LT LIMON AROMALI GAZOZ    18456 2017-01-07     1.0   2.00          2.00     1.85      52.0   Kocaeli Subesi     Eyüp CİNE   Kocaeli  Marmara   40.8533    29.8815     467369  Sercan KIZILOK       156  SPRİTE         İÇECEK     GAZLI İÇECEK               GAZOZ 2017-01-08 16:16:11 2017-01-08 16:17:13      E
-1  10537.0       8.0                        TOZ SEKER    18105 2017-01-06     5.0   2.65         13.25    12.27       8.0   Antalya Subesi  İlhan ÖRENLİ   Antalya  Akdeniz   36.8841    30.7056     131464    İsmet ŞINGIR       NaN     NaN         İÇECEK        ÇAY KAHVE  SEKER TATLANDIRICI 2017-01-07 11:04:34 2017-01-07 11:05:37      E
-2  11335.0    5979.0             FALIM SAKIZ 5LI NANE    18350 2017-01-03     1.0   0.40          0.40     0.37      40.0  İstanbul Subesi  İsmet SARTIK  İstanbul  Marmara   41.0053    28.9770     656969     Yağız KUBAL       300   FALIM           GIDA  SAKIZ SEKERLEME               SAKIZ 2017-01-04 14:00:03 2017-01-04 14:01:01      E
+   ITEMCODE      ITEMNAME  PRICE CATEGORY_NAME1      CATEGORY_NAME2            CATEGORY_NAME3 BRAND  total_sold price_tier_global price_tier_category     necessity_auto    necessity_final popularity  PRICE_2017  PRICE_2026 price_tier_global_2026 price_tier_category_2026
+0         6   FLORMAR OJE   1.75       KOZMETİK  MAKYAJ MALZEMELERİ  MANİKUR PEDİKÜR ÜRÜNLERİ   NaN        85.0              ucuz                ucuz  tam_gerekli_değil  tam_gerekli_deyil    popüler        1.75      21.770                   ucuz                     ucuz
+1         7  EKMEK 250 GR   0.90           GIDA       UNLU MAMÜLLER                     EKMEK   NaN     18551.0              ucuz                ucuz      temel_ihtiyaç      temel_ihtiyac    popüler        0.90      11.196                   ucuz                     ucuz
+2         8     TOZ SEKER   2.65         İÇECEK           ÇAY KAHVE        SEKER TATLANDIRICI   NaN     19143.0             uygun              pahalı           olabilir  tam_gerekli_deyil    popüler        2.65      32.966                  uygun                   pahalı
 Last 3 rows:
-              ID  ITEMCODE                ITEMNAME  FICHENO      DATE_  AMOUNT  PRICE  LINENETTOTAL  LINENET  BRANCHNR           BRANCH        SALESMAN      CITY     REGION  LATITUDE  LONGITUDE CLIENTCODE        CLIENTNAME BRANDCODE BRAND CATEGORY_NAME1 CATEGORY_NAME2 CATEGORY_NAME3           STARTDATE             ENDDATE GENDER
-611105  492612.0       7.0            EKMEK 250 GR   130100 2017-03-15     1.0    0.9           0.9     0.89      59.0     Muğla Subesi  Nisa nur SAĞIM     Muğla        Ege   37.2153    28.3636      78643  Cengiz BEREKETÇİ       NaN   NaN           GIDA  UNLU MAMÜLLER          EKMEK 2017-03-16 17:51:04 2017-03-16 17:51:18      E
-611106  512343.0       7.0            EKMEK 250 GR   134762 2017-03-18     1.0    0.9           0.9     0.88      40.0  İstanbul Subesi     Arife DORAP  İstanbul    Marmara   41.0053    28.9770     926041  Elifnur EGİNKAYA       NaN   NaN           GIDA  UNLU MAMÜLLER          EKMEK 2017-03-19 17:00:12 2017-03-19 17:01:20      K
-611107  512179.0    3942.0  ETI 80 GR KARAM BITTER   134738 2017-03-18     1.0    1.9           1.9     1.76      74.0     Tokat Subesi  Lütfiye DÖŞEME     Tokat  Karadeniz   40.3167    36.5500     241748    Hacer CANDEMİR        44   ETİ           GIDA  BÜSKİVİ ÇEREZ        BÜSKİVİ 2017-03-19 16:00:15 2017-03-19 16:00:37      K
+      ITEMCODE                                     ITEMNAME  PRICE   CATEGORY_NAME1         CATEGORY_NAME2   CATEGORY_NAME3  BRAND  total_sold price_tier_global price_tier_category     necessity_auto    necessity_final popularity  PRICE_2017  PRICE_2026 price_tier_global_2026 price_tier_category_2026
+9364     23597  KOSKA YAZ HELVASI KARAMELLI& CEVIZLI 200 GR   4.50  SÜT KAHVALTILIK            KAHVALTILIK            HELVA  KOSKA         1.0            pahalı               uygun      temel_ihtiyaç      temel_ihtiyac      nadir        4.50      55.980                 pahalı                    uygun
+9365     23598  KOSKA YAZ HELVASI KARAMELLI& CEVIZLI 500 GR   9.75  SÜT KAHVALTILIK            KAHVALTILIK            HELVA  KOSKA         5.0        çok_pahalı          çok_pahalı      temel_ihtiyaç      temel_ihtiyac      nadir        9.75     121.290             çok_pahalı               çok_pahalı
+9366     23602         YAREN ARTCRAFT ZEN CAY TAKIMI RENKLI  14.95               EV  MUTFAK EŞYA GEREÇLERİ  CAM EL ALETLERİ  YAREN         1.0        çok_pahalı          çok_pahalı  tam_gerekli_değil  tam_gerekli_deyil      nadir       14.95     185.978             çok_pahalı               çok_pahalı
 ============================================================
 
 ============================================================

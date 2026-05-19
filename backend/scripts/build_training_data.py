@@ -55,9 +55,9 @@ eda_file("customer_shopping_data.csv", shopping)
 retail = pd.read_csv(RAW / "online_retail_II.csv", encoding='latin-1')
 eda_file("online_retail_II.csv", retail)
 
-# 3) market_sales.xlsx
-market = pd.read_excel(RAW / "market_sales.xlsx", engine='openpyxl')
-eda_file("market_sales.xlsx", market)
+# 3) product_catalog_updated_2026.xlsx
+catalog = pd.read_excel(RAW / "product_catalog_updated_2026.xlsx", engine='openpyxl')
+eda_file("product_catalog_updated_2026.xlsx", catalog)
 
 # 4) cards_data.csv
 cards = pd.read_csv(RAW / "cards_data.csv")

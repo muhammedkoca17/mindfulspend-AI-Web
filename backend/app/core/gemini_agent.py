@@ -52,6 +52,26 @@ ozgurluk gibi).
 6. Emoji kullanma.
 7. Kayiptan kacinma (Loss Aversion) prensibini uygula."""
 
+SUCCESS_SYSTEM_PROMPT = """\
+Sen MindfulSpend AI'sin — Davranissal Finans uzmani ve destekleyici bir finansal kocsun. \
+Kullanici sepetindeki urunleri satin alarak alisverisi tamamladi.
+
+Gorev: Satin alinan tum urunleri, kategorilerini ve temel/istege bagli durumlarini analiz ederek \
+kullaniciya kisa, etkili, samimi ve kisisellestirilmis bir Turkce geribildirim (basari) mesaji yaz.
+
+Kesin kurallar:
+1. Toplam yanit **en fazla 2 cumle** olmali.
+2. Eger sepetinde ISTEGE BAGLI (discretionary/non-essential) urunler varsa: "Tebrikler", "Hedefine yaklastin" \
+tarzi genel tebrik kaliplarini kullanma. Bunun yerine, satin aldigi istege bagli urunleri \
+(orn: cips, akilli saat, cikolata) somut sekilde belirterek, bu harcamanin butcesine/hedeflerine olasi etkisini \
+hatirlat ve gelecek sefere daha secici olmasi icin dürüst ve destekleyici bir dille geri bildirim ver.
+3. Eger sepetinde SADECE TEMEL (essential) urunler varsa: Kullaniciyi bütçe bilinci ve disiplini icin samimiyetle \
+tebrik et, hedefine gercekten yaklastigini vurgula ve bu disiplinli davranisini ov.
+4. ASLA suclayici/yargilayici kelimeler kullanma (israf, hata, kotu karar vb. yasak). Destekleyici ve yol gosterici ol.
+5. Hazir/sabit kaliplar kullanma. Mesaj dogrudan sepetteki urunlere ve kategorilere ozel, dinamik olmalidir.
+6. Sayilari somut belirt (orn: "Bu alisveristeki 3.659 TL istege bagli harcama...").
+7. Emoji kullanma."""
+
 CHAT_SYSTEM_PROMPT = """\
 Sen MindfulSpend AI'nin finansal danismanisin.
 
@@ -580,6 +600,82 @@ async def chat_with_gemini(message: str, db, user_id: int) -> str:
 # ---------------------------------------------------------------------------
 class GeminiAgent:
     """Function Calling Agent for cart checkout nudge (sync)."""
+
+    def generate_checkout_success_message(self, context: dict) -> str:
+        """Generate dynamic checkout success feedback based on purchased items and categories."""
+        user_name = context.get("user_name", "Kullanici")
+        total_amount = context.get("total_amount", 0.0)
+        essential_amount = context.get("essential_amount", 0.0)
+        discretionary_amount = context.get("discretionary_amount", 0.0)
+        items = context.get("items", [])
+        goal_title = context.get("goal_title")
+        days_delayed = context.get("days_delayed", 0.0)
+
+        # Separate items
+        essential_names = [i["name"] for i in items if i["is_essential"]]
+        discretionary_names = [i["name"] for i in items if not i["is_essential"]]
+
+        is_mock = not settings.gemini_enabled
+        if is_mock:
+            # Fallback mock success message
+            if discretionary_names:
+                item_names = ", ".join(discretionary_names[:3])
+                if len(discretionary_names) > 3:
+                    item_names += " ve diger"
+                msg = f"Satin aldigin {item_names} gibi istege bagli urunler icin harcadigin {discretionary_amount:.0f} TL butceni etkileyebilir."
+                if goal_title and days_delayed > 0:
+                    msg += f" Bu tercih, '{goal_title}' hedefini {days_delayed:.1f} gun ertelemene yol acabilir."
+                else:
+                    msg += " Bir sonraki alisverisinde bu kategorileri sinirlandirmayi dusunebilirsin."
+                return msg
+            else:
+                msg = f"Tebrikler {user_name}! Sadece temel ihtiyaclari iceren bu bilincli alisverisin ile butceni korudun"
+                if goal_title:
+                    msg += f" ve '{goal_title}' hedefine bir adim daha yaklastin."
+                else:
+                    msg += " ve birikim hedeflerine bagli kaldin."
+                return msg
+
+        try:
+            # Construct user prompt
+            items_str = "\n".join(
+                f"- {i['name']} ({i['category']}): {i['total_price']} TL ({'Temel' if i['is_essential'] else 'Istege Bagli'})"
+                for i in items
+            )
+            
+            user_prompt = (
+                f"Kullanici Adi: {user_name}\n"
+                f"Toplam Harcama: {total_amount:.2f} TL\n"
+                f"Temel Harcama: {essential_amount:.2f} TL\n"
+                f"Istege Bagli Harcama: {discretionary_amount:.2f} TL\n"
+                f"Hedef: {goal_title or 'Yok'}\n"
+                f"Hedef Erteleme: {days_delayed:.1f} gun\n\n"
+                f"Satin Alinan Urunler:\n{items_str}\n\n"
+                f"Lutfen bu verilere gore geri bildirim mesaji yaz:"
+            )
+
+            text = _gemini_call(SUCCESS_SYSTEM_PROMPT, user_prompt)
+            return text
+        except Exception as exc:
+            log.warning("Gemini checkout success call failed (%s); using mock fallback", exc)
+            # Re-run mock logic as fallback
+            if discretionary_names:
+                item_names = ", ".join(discretionary_names[:3])
+                if len(discretionary_names) > 3:
+                    item_names += " ve diger"
+                msg = f"Satin aldigin {item_names} gibi istege bagli urunler icin harcadigin {discretionary_amount:.0f} TL butceni etkileyebilir."
+                if goal_title and days_delayed > 0:
+                    msg += f" Bu tercih, '{goal_title}' hedefini {days_delayed:.1f} gun ertelemene yol acabilir."
+                else:
+                    msg += " Bir sonraki alisverisinde bu kategorileri sinirlandirmayi dusunebilirsin."
+                return msg
+            else:
+                msg = f"Tebrikler {user_name}! Sadece temel ihtiyaclari iceren bu bilincli alisverisin ile butceni korudun"
+                if goal_title:
+                    msg += f" ve '{goal_title}' hedefine bir adim daha yaklastin."
+                else:
+                    msg += " ve birikim hedeflerine bagli kaldin."
+                return msg
 
     def generate_nudge(self, context: dict, db=None) -> str:
         if db is None or not settings.gemini_enabled:

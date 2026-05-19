@@ -143,6 +143,16 @@ CATEGORY_HIERARCHY: dict[str, dict] = {
             "sigara": ["sigara", "tutun", "puro"],
         },
     },
+    "diger": {
+        "label": "Diger Harcamalar",
+        "icon": "📦",
+        "is_essential": False,
+        "sub_categories": {
+            "ev_gerecleri": ["mutfak", "elektronik", "ev tekstil", "terlik"],
+            "evcil_hayvan": ["mamalari", "mama"],
+            "diger": ["diger"],
+        },
+    },
 }
 
 # Subscription price table (rule engine)
@@ -190,6 +200,7 @@ DISCRETIONARY_CATEGORIES: set[str] = {
     "giyim",
     "abonelik",
     "sigara",
+    "diger",
 }
 
 # ---------------------------------------------------------------------------

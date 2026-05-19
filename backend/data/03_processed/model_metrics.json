@@ -14,7 +14,7 @@
   },
   "training_data": {
     "total_rows": 99457,
-    "date_trained": "2026-05-17",
+    "date_trained": "2026-05-19",
     "datasets_used": [
       "customer_shopping_data.csv",
       "online_retail_II.csv"
