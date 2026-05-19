@@ -211,11 +211,16 @@ FastAPI sunucumuz, `GEMINI_API_KEY` tanımlanmamışsa veya `USE_MOCK_GEMINI=tru
     ```
 
 3.  **Çevresel Değişkenleri Ayarlayın:**
-    `backend/` altında bir `.env.local` dosyası oluşturun ve Gemini API anahtarınızı ekleyin (Yoksa mock mod otomatik devreye girer):
+    Jüri veya test eden kişi olarak yapay zekayı kendi API anahtarınızla çalıştırmak isterseniz:
+    *   `backend/` dizini altındaki `.env.example` dosyasının bir kopyasını oluşturup adını `.env.local` yapın.
+    *   Oluşturduğunuz `.env.local` dosyası içerisindeki `GEMINI_API_KEY` alanına kendi Gemini API anahtarınızı girin:
     ```env
-    GEMINI_API_KEY=AIzaSy...
+    GEMINI_API_KEY=kendi_gemini_api_anahtariniz
     DATABASE_URL=sqlite:///./data/mindfulspend.db
     ```
+    
+    > [!TIP]
+    > **Çevrimdışı (Mock) Mod Kolaylığı:** Eğer kendi API anahtarınızı girmek istemiyorsanız bu adımı tamamen geçebilirsiniz! Sistemimiz `.env.local` dosyasının veya API anahtarının eksik olduğunu otomatik olarak algılar ve hatasız çalışması için **"Güvenli Çevrimdışı Modu (Mock Engine)"** devreye sokar. Bu sayede asistan cevapları, dürtmeler ve tebrik mesajları hazır senaryolarla kusursuz bir şekilde simüle edilir.
 
 4.  **Jüri Canlı Simülasyon Hesabını Tohumlayın (Seeding):**
     Jürinin boş bir ekran görmemesi, son 2 aylık finansal geçmişin, 60+ işlemin ve zaman serisi grafiklerinin anında yüklenebilmesi için özel tohumlama scriptini çalıştırın:
