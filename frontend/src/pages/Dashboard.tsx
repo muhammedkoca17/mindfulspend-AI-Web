@@ -100,10 +100,31 @@ export default function Dashboard() {
             <button onClick={() => {setIsEditingSalary(!isEditingSalary); setNewSalary(String(user.monthly_salary || ''));}} className="text-xs text-emerald-600 hover:text-emerald-500 opacity-0 group-hover:opacity-100 transition-opacity bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200 font-extrabold cursor-pointer">Düzenle</button>
           </p>
           {isEditingSalary ? (
-            <div className="flex gap-2 mt-2">
-              <input type="number" value={newSalary} onChange={(e) => setNewSalary(e.target.value)} className="w-full bg-[#FAF9F6] border border-slate-200 text-slate-900 px-3 py-1.5 rounded-lg outline-none focus:border-emerald-500 transition-colors" />
-              <button onClick={handleUpdateSalary} className="bg-emerald-650 hover:bg-emerald-600 text-white px-4 rounded-lg text-sm font-bold transition-colors cursor-pointer">Kaydet</button>
-            </div>
+            <form
+              onSubmit={(e) => { e.preventDefault(); handleUpdateSalary(); }}
+              className="flex items-center gap-2 mt-2"
+            >
+              <input
+                type="number"
+                value={newSalary}
+                onChange={(e) => setNewSalary(e.target.value)}
+                className="flex-1 min-w-0 bg-[#FAF9F6] border border-slate-200 text-slate-900 px-3 py-1.5 rounded-lg outline-none focus:border-emerald-500 transition-colors font-bold"
+                autoFocus
+              />
+              <button
+                type="submit"
+                className="bg-emerald-650 hover:bg-emerald-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer shrink-0"
+              >
+                Kaydet
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsEditingSalary(false)}
+                className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer shrink-0 border border-slate-200"
+              >
+                İptal
+              </button>
+            </form>
           ) : (
             <p className="text-3xl font-black font-display text-slate-900 tracking-tight">₺{(user.monthly_salary || 0).toLocaleString()}</p>
           )}
