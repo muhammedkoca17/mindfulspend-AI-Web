@@ -209,7 +209,7 @@ FastAPI sunucumuz, `GEMINI_API_KEY` tanımlanmamışsa veya `USE_MOCK_GEMINI=tru
     ```
     *   **Oluşturulan Giriş Bilgileri:**
         *   **E-posta:** `test.jury@mindfulspend.ai`
-        *   **Şifre:** `12345678` *(Jüri kolaylığı için hem bu şifre hem de hash'lenmiş veritabanı şifresi eşzamanlı aktiftir!)*
+        *   **Şifre:** `JuryTest123!` *(Jüri kolaylığı için hem bu şifre hem de hash'lenmiş veritabanı şifresi eşzamanlı aktiftir!)*
 
 5.  **FastAPI Sunucusunu Başlatın:**
     ```powershell

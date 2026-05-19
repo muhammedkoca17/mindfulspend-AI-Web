@@ -265,10 +265,14 @@ goals
 
 products (Virtual Market)
 ├── id (PK)
-├── name, category (indexed), sub_category
-├── price, unit (adet | kg | litre)
-├── image_url (nullable)
+├── item_code, name, brand
+├── category (12 Turkish categories), sub_category
+├── category_name1, category_name2, category_name3
+├── price, unit (adet | kg)
 ├── is_essential (bool)
+├── total_sold, price_tier_global, price_tier_category
+├── necessity_auto, necessity_final, popularity
+├── image_url (nullable)
 ├── is_active (bool)
 ├── stock (int)
 ├── created_at
@@ -491,7 +495,7 @@ interface NudgeResponse {
 |---------|--------|----------------|----------------|
 | **customer_shopping_data.csv** | CSV | Turkish shopper demographics, malls, age/gender variables, price/quantity | Kaggle Shopping Dataset |
 | **online_retail_II.csv** | CSV | Real-world online retail transaction items, GBP amounts converted to TRY (40x) | Kaggle Online Retail II |
-| **product_catalog_updated_2026.xlsx** | Excel | 9,367 items with 2026 inflation-adjusted prices (12.44x multiplier) and necessity classifications | 2026 Updated Market Catalog |
+| **product_catalog_updated_2026.xlsx** | Excel | 9,367 items with 2026 inflation-adjusted prices (12.44x multiplier) and 11 integrated metadata fields: `item_code`, `brand`, `category_name1/2/3`, `total_sold`, `price_tier_global`, `price_tier_category`, `necessity_auto`, `necessity_final`, `popularity`. | 2026 Updated Market Catalog |
 | **cards_data.csv** | CSV | Credit/debit card types, bank BIN prefixes and processing limits | Local cards db |
 | **users_data.csv** | CSV | Demographic data for user profiling and baseline aggregates | User profiles |
 | **turkey_bin_list.json** | JSON | Standard Turkish Bank BIN numbers, card brand and type metadata | Turkish BIN List |

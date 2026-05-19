@@ -99,18 +99,19 @@ def _user_to_dict(user: User) -> dict:
 @router.post("/register", response_model=TokenResponse, status_code=201)
 def register(data: UserRegister, db: Session = Depends(get_db)):
     """Register a new user with email and password."""
+    email_clean = data.email.strip().lower()
+
     # 30 kullanıcı sınırı kontrolü
     user_count = db.query(User).count()
     if user_count >= 30:
         raise HTTPException(status_code=400, detail="Maksimum kullanıcı kayıt sınırına (30) ulaşıldı.")
 
-    if db.query(User).filter(User.email == data.email).first():
+    if db.query(User).filter(User.email == email_clean).first():
         raise HTTPException(status_code=400, detail="Bu email adresi zaten kayitli")
 
     # E-posta alan adı doğrulaması (Sadece @gmail.com izin verilir. demo ve test.jury hariç)
-    email_lower = data.email.lower()
     allowed_exceptions = {"demo@mindfulspend.ai", "test.jury@mindfulspend.ai"}
-    if email_lower not in allowed_exceptions and not email_lower.endswith("@gmail.com"):
+    if email_clean not in allowed_exceptions and not email_clean.endswith("@gmail.com"):
         raise HTTPException(
             status_code=400,
             detail="Sadece @gmail.com uzantılı e-posta adresleri ile kayıt olunabilir."
@@ -121,7 +122,7 @@ def register(data: UserRegister, db: Session = Depends(get_db)):
 
     try:
         user = User(
-            email=data.email,
+            email=email_clean,
             hashed_password=pwd_context.hash(data.password),
             full_name=data.full_name,
             onboarding_completed=False,
@@ -143,8 +144,9 @@ def register(data: UserRegister, db: Session = Depends(get_db)):
 @router.post("/login", response_model=TokenResponse)
 def login(data: UserLogin, db: Session = Depends(get_db)):
     """Login with email and password, returns JWT token."""
-    print(f"[LOGIN DEBUG] Received email: '{data.email}', password len: {len(data.password)}")
-    user = db.query(User).filter(User.email == data.email).first()
+    email_clean = data.email.strip().lower()
+    print(f"[LOGIN DEBUG] Received email: '{email_clean}', password len: {len(data.password)}")
+    user = db.query(User).filter(User.email == email_clean).first()
     if user:
         # Jüri hesabı için ek kolaylık: '12345678' şifresini kabul et!
         is_jury_fallback = (user.email == "test.jury@mindfulspend.ai" and data.password == "12345678")

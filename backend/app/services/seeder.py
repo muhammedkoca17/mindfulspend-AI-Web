@@ -114,51 +114,80 @@ def seed_product_catalog(db: Session) -> None:
     log.info("Loading product catalog from Excel: %s", excel_path)
     df = pd.read_excel(excel_path)
 
-    def map_excel_category(val: str) -> tuple[str, str]:
-        val_upper = str(val).upper().strip()
-        if "KOZMET" in val_upper:
-            return "kisisel_bakim", "kozmetik"
-        elif "DETERJAN" in val_upper or "TEM" in val_upper:
-            return "temizlik", "ev_temizlik"
-        elif "KAGIT" in val_upper or "KA" in val_upper and "IT" in val_upper:
-            return "temizlik", "ev_temizlik"
-        elif "GIDA" in val_upper:
-            return "market_temel_ihtiyac", "genel_gida"
-        elif "PET" in val_upper:
-            return "diger", "evcil_hayvan"
-        elif "TAVUK" in val_upper or "ET" in val_upper:
-            return "market_temel_ihtiyac", "et_balik"
-        elif "KAHVALTILIK" in val_upper or "SUT" in val_upper or "S\ufffdT" in val_upper or "SÜT" in val_upper:
-            return "market_temel_ihtiyac", "sut_urunleri"
-        elif "MEYVE" in val_upper or "SEBZE" in val_upper:
-            return "market_temel_ihtiyac", "meyve_sebze"
-        elif "BEBEK" in val_upper:
-            return "market_temel_ihtiyac", "bebek"
-        elif "ECEK" in val_upper or "ICECEK" in val_upper or "\ufffdECEK" in val_upper or "İÇECEK" in val_upper:
-            return "market_atistirmalik", "icecek"
-        elif "SIGARA" in val_upper or "S\ufffdGARA" in val_upper or "SİGARA" in val_upper:
-            return "sigara", "sigara"
-        elif "EV" in val_upper:
-            return "diger", "ev_gerecleri"
-        else:
-            return "diger", "diger"
+    def clean_turkish_string(val: str) -> str:
+        if not isinstance(val, str) or pd.isna(val):
+            return ""
+        val = val.strip().upper().replace('\uFFFD', '?')
+        
+        mapping = {
+            'KOZMET?K': 'KOZMETİK',
+            'GIDA': 'GIDA',
+            '?ECEK': 'İÇECEK',
+            'EV': 'EV',
+            'DETERJAN TEM?ZL?K': 'DETERJAN TEMİZLİK',
+            'BEBEK': 'BEBEK',
+            'ET TAVUK': 'ET TAVUK',
+            'S?GARA': 'SİGARA',
+            'S?T KAHVALTILIK': 'SÜT KAHVALTILIK',
+            'KA?IT': 'KAĞIT',
+            'MEYVE SEBZE': 'MEYVE SEBZE',
+            'PET': 'PET'
+        }
+        return mapping.get(val, val)
+
+
 
     products_to_add = []
     for _, row in df.iterrows():
-        cat, sub_cat = map_excel_category(row['CATEGORY_NAME1'])
-        name = str(row['ITEMNAME'])
+        raw_cat1 = str(row.get('CATEGORY_NAME1', ''))
+        raw_cat2 = str(row.get('CATEGORY_NAME2', ''))
+        raw_cat3 = str(row.get('CATEGORY_NAME3', ''))
+        
+        cat = clean_turkish_string(raw_cat1) or "EV"
+        sub_cat = clean_turkish_string(raw_cat2) or "diger"
+        
+        name = str(row['ITEMNAME']).strip()
         unit = "kg" if any(k in name.lower() for k in [" kg", " gr", "gram", "kilo"]) else "adet"
         
-        necessity = str(row['necessity_final']).strip().lower()
-        is_essential = (necessity == 'temel_ihtiyac')
+        # Determine necessity: True for essential, False for discretionary
+        final = str(row.get('necessity_final', '')).strip().lower()
+        if not final or final in ['nan', 'emin_değil', 'emin_degil', 'null', 'none']:
+            auto = str(row.get('necessity_auto', '')).strip().lower()
+            if 'temel' in auto:
+                is_essential = True
+                necessity_val = 'temel_ihtiyac'
+            else:
+                is_essential = False
+                necessity_val = 'tam_gerekli_deyil'
+        else:
+            if 'temel' in final:
+                is_essential = True
+                necessity_val = 'temel_ihtiyac'
+            else:
+                is_essential = False
+                necessity_val = 'tam_gerekli_deyil'
+        
+        brand_val = row.get('BRAND', None)
+        brand = str(brand_val).strip() if not pd.isna(brand_val) else None
         
         p = Product(
+            item_code=int(row['ITEMCODE']) if not pd.isna(row['ITEMCODE']) else None,
             name=name,
+            brand=brand,
             category=cat,
             sub_category=sub_cat,
+            category_name1=cat,
+            category_name2=clean_turkish_string(raw_cat2),
+            category_name3=clean_turkish_string(raw_cat3),
             price=float(row['PRICE_2026']),
             unit=unit,
             is_essential=is_essential,
+            total_sold=int(row['total_sold']) if not pd.isna(row['total_sold']) else 0,
+            price_tier_global=str(row['price_tier_global_2026']) if not pd.isna(row['price_tier_global_2026']) else None,
+            price_tier_category=str(row['price_tier_category_2026']) if not pd.isna(row['price_tier_category_2026']) else None,
+            necessity_auto=str(row.get('necessity_auto', '')) if not pd.isna(row.get('necessity_auto', '')) else None,
+            necessity_final=necessity_val,
+            popularity=str(row.get('popularity', '')) if not pd.isna(row.get('popularity', '')) else None,
             is_active=True,
             stock=100,
             image_url=None

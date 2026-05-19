@@ -135,152 +135,170 @@ export default function Goals() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-8 animate-fade-in pb-20">
+    <div className="max-w-5xl mx-auto space-y-10 animate-fade-in pb-24 relative">
+      {/* Background Glow */}
+      <div className="absolute top-0 right-1/4 w-full max-w-lg h-64 bg-purple-500/10 blur-[120px] pointer-events-none"></div>
 
       {/* Header */}
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
         <div>
-          <h1 className="text-3xl font-bold text-white mb-2">Hedeflerim</h1>
-          <p className="text-gray-400">Finansal hedeflerini takip et, her alışverişte hedefe bir adım daha yaklaş.</p>
+          <h1 className="text-4xl font-black font-display text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 mb-2 tracking-tight">Hedeflerim</h1>
+          <p className="text-slate-400 font-medium">Finansal hedeflerini takip et, her alışverişte hedefe bir adım daha yaklaş.</p>
         </div>
         <button
           onClick={() => setShowAdd(true)}
-          className="bg-purple-600 hover:bg-purple-500 text-white px-5 py-3 rounded-xl font-bold transition flex items-center gap-2 shadow-lg shadow-purple-500/20"
+          className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-6 py-3.5 rounded-2xl font-bold transition-all duration-300 flex items-center gap-2 shadow-glow-purple hover:-translate-y-1 hover:scale-105 active:scale-95 group"
         >
-          <Plus size={20} /> Yeni Hedef
+          <Plus size={20} className="group-hover:rotate-90 transition-transform duration-300" /> Yeni Hedef
         </button>
       </div>
 
       {/* Overall Progress */}
       {goals.length > 0 && (
-        <div className="bg-gradient-to-r from-purple-900/40 to-indigo-900/40 border border-purple-500/20 rounded-2xl p-6">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="bg-purple-500/20 p-3 rounded-lg">
-                <TrendingUp className="text-purple-400" />
+        <div className="bg-[#1E293B]/80 backdrop-blur-md border border-slate-700/50 shadow-glass rounded-[32px] p-8 relative overflow-hidden animate-slide-up">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-indigo-500/10 to-purple-500/10 rounded-full blur-3xl pointer-events-none -mr-20 -mt-20"></div>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 mb-6 relative z-10">
+            <div className="flex items-center gap-4">
+              <div className="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 p-4 rounded-2xl border border-indigo-500/20 shadow-inner">
+                <TrendingUp size={28} className="text-indigo-400" />
               </div>
               <div>
-                <h2 className="text-lg font-bold text-white">Genel İlerleme</h2>
-                <p className="text-sm text-gray-400">Tüm hedeflerinin toplamı</p>
+                <h2 className="text-2xl font-bold font-display text-white tracking-tight">Genel İlerleme</h2>
+                <p className="text-sm text-slate-400 font-medium mt-0.5">Tüm hedeflerinin toplamı</p>
               </div>
             </div>
-            <div className="text-right">
-              <p className="text-3xl font-bold text-purple-400">%{overallProgress}</p>
-              <p className="text-xs text-gray-400">₺{totalSaved.toLocaleString()} / ₺{totalTarget.toLocaleString()}</p>
+            <div className="sm:text-right">
+              <p className="text-5xl font-black font-display text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400 tracking-tighter drop-shadow-sm mb-1">%{overallProgress}</p>
+              <p className="text-xs text-slate-400 font-mono tracking-widest font-bold">₺{totalSaved.toLocaleString()} / ₺{totalTarget.toLocaleString()}</p>
             </div>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-3">
+          <div className="w-full bg-[#0F172A] rounded-full h-4 shadow-inner overflow-hidden border border-slate-700/50">
             <div
-              className="bg-gradient-to-r from-purple-500 to-indigo-500 h-3 rounded-full transition-all duration-1000"
+              className="bg-gradient-to-r from-indigo-500 via-purple-500 to-emerald-400 h-full rounded-full transition-all duration-1000 ease-out relative shadow-[0_0_15px_rgba(168,85,247,0.5)]"
               style={{ width: `${Math.min(overallProgress, 100)}%` }}
-            />
+            >
+              <div className="absolute inset-0 bg-white/20 w-full h-full rounded-full animate-pulse-soft"></div>
+            </div>
           </div>
         </div>
       )}
 
       {/* Goals Grid */}
       {goals.length === 0 ? (
-        <div className="text-center py-20 space-y-6">
-          <div className="w-24 h-24 bg-gray-800 rounded-full flex items-center justify-center mx-auto">
-            <Target size={48} className="text-gray-600" />
+        <div className="text-center py-24 space-y-6 bg-[#1E293B]/40 backdrop-blur-md rounded-[32px] border border-slate-700/50 shadow-glass relative z-10">
+          <div className="w-28 h-28 bg-[#0F172A]/80 rounded-full flex items-center justify-center mx-auto shadow-inner border border-slate-700/50 group">
+            <Target size={56} className="text-slate-500 group-hover:scale-110 transition-transform duration-500" />
           </div>
-          <h2 className="text-2xl font-bold text-gray-500">Henüz bir hedef eklemedin</h2>
-          <p className="text-gray-600">Araba, tatil, ev veya herhangi bir hedef ekleyerek başla!</p>
-          <button onClick={() => setShowAdd(true)} className="text-purple-400 hover:text-purple-300 font-medium underline">
-            İlk hedefini oluştur →
+          <div>
+            <h2 className="text-3xl font-bold font-display text-slate-300 mb-2">Henüz bir hedef eklemedin</h2>
+            <p className="text-slate-500 text-lg">Araba, tatil, ev veya herhangi bir hedef ekleyerek başla!</p>
+          </div>
+          <button onClick={() => setShowAdd(true)} className="mt-4 text-indigo-400 hover:text-indigo-300 font-bold border-b border-indigo-400/30 hover:border-indigo-400 pb-1 transition-colors text-lg group inline-flex items-center gap-2">
+            İlk hedefini oluştur <span className="group-hover:translate-x-1 transition-transform">→</span>
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {goals.map((goal) => {
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+          {goals.map((goal, index) => {
             const pct = Math.min(goal.progress_percent, 100);
             const remaining = goal.target_amount - goal.current_amount;
             const icon = GOAL_ICONS[goal.category] || '🎯';
             const monthlySalary = user.monthly_salary || 0;
             const monthsLeft = monthlySalary > 0 ? Math.ceil(remaining / (monthlySalary * 0.2)) : 0;
+            
+            const isCompleted = pct >= 100;
+            const statusColor = isCompleted ? 'emerald' : pct >= 50 ? 'indigo' : 'amber';
 
             return (
-              <div key={goal.id} className="bg-gray-800 border border-gray-700 rounded-2xl p-6 hover:border-purple-500/30 transition group">
+              <div 
+                key={goal.id} 
+                className="bg-[#1E293B]/80 backdrop-blur-md border border-slate-700/50 rounded-[28px] p-7 hover:border-indigo-500/50 hover:shadow-[0_15px_40px_rgba(99,102,241,0.15)] transition-all duration-500 group flex flex-col h-full animate-slide-up hover:-translate-y-1.5"
+                style={{ animationDelay: `${index * 100}ms` }}
+              >
                 {/* Top row */}
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl">{icon}</span>
+                <div className="flex justify-between items-start mb-6">
+                  <div className="flex items-center gap-4">
+                    <div className="text-4xl bg-[#0F172A]/50 w-14 h-14 rounded-2xl flex items-center justify-center shadow-inner border border-slate-700/30 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-500">{icon}</div>
                     <div>
-                      <h3 className="text-xl font-bold text-white">{goal.title}</h3>
-                      <p className="text-xs text-gray-500 uppercase tracking-wider">{goal.category}</p>
+                      <h3 className="text-2xl font-bold font-display text-white tracking-tight leading-tight group-hover:text-indigo-300 transition-colors">{goal.title}</h3>
+                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1 bg-[#0F172A]/50 inline-block px-2 py-0.5 rounded border border-slate-700/50">{goal.category}</p>
                     </div>
                   </div>
-                  <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition">
+                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <button
                       onClick={() => { setEditGoal(goal); setEditAmount(String(goal.current_amount)); }}
-                      className="p-2 text-gray-400 hover:text-purple-400 hover:bg-purple-500/10 rounded-lg transition"
+                      className="p-2.5 text-slate-400 hover:text-indigo-400 hover:bg-indigo-500/10 rounded-xl transition-colors border border-transparent hover:border-indigo-500/20"
                       title="Birikimleri Güncelle"
                     >
-                      <Edit3 size={16} />
+                      <Edit3 size={18} />
                     </button>
                     <button
                       onClick={() => handleDelete(goal.id)}
-                      className="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition"
+                      className="p-2.5 text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 rounded-xl transition-colors border border-transparent hover:border-rose-500/20"
                       title="Hedefi Sil"
                     >
-                      <Trash2 size={16} />
+                      <Trash2 size={18} />
                     </button>
                   </div>
                 </div>
 
                 {/* Progress bar */}
-                <div className="mb-4">
-                  <div className="flex justify-between text-sm mb-2">
-                    <span className="text-gray-400">İlerleme</span>
-                    <span className={`font-bold ${pct >= 100 ? 'text-green-400' : pct >= 50 ? 'text-purple-400' : 'text-orange-400'}`}>
+                <div className="mb-6">
+                  <div className="flex justify-between text-sm mb-2.5 items-end">
+                    <span className="text-slate-400 font-medium">İlerleme</span>
+                    <span className={`text-2xl font-black font-display tracking-tighter ${isCompleted ? 'text-emerald-400' : pct >= 50 ? 'text-indigo-400' : 'text-amber-400'}`}>
                       %{pct}
                     </span>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-3">
+                  <div className="w-full bg-[#0F172A] rounded-full h-3 shadow-inner border border-slate-700/30 overflow-hidden">
                     <div
-                      className={`h-3 rounded-full transition-all duration-700 ${
-                        pct >= 100 ? 'bg-green-500' : pct >= 50 ? 'bg-gradient-to-r from-purple-500 to-indigo-500' : 'bg-gradient-to-r from-orange-500 to-yellow-500'
+                      className={`h-full rounded-full transition-all duration-1000 ease-out relative ${
+                        isCompleted ? 'bg-emerald-500 shadow-[0_0_10px_rgba(16,185,129,0.5)]' : pct >= 50 ? 'bg-gradient-to-r from-indigo-500 to-purple-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]' : 'bg-gradient-to-r from-amber-500 to-orange-500 shadow-[0_0_10px_rgba(245,158,11,0.5)]'
                       }`}
                       style={{ width: `${pct}%` }}
-                    />
+                    >
+                      <div className="absolute inset-0 bg-white/20 w-full h-full rounded-full animate-pulse-soft"></div>
+                    </div>
                   </div>
                 </div>
 
                 {/* Amount details */}
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-gray-900 p-3 rounded-xl flex flex-col justify-between">
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs text-gray-500">Biriken</span>
+                <div className="grid grid-cols-2 gap-4 mb-6 mt-auto">
+                  <div className="bg-[#0F172A]/50 p-4 rounded-2xl flex flex-col justify-between border border-slate-700/30 shadow-inner group-hover:border-emerald-500/20 transition-colors">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-xs text-slate-400 font-medium uppercase tracking-widest">Biriken</span>
                       <button
                         onClick={() => {
                           setQuickAddGoal(goal);
                           setQuickAddAmount('');
                         }}
-                        className="bg-green-500/20 hover:bg-green-500 text-green-400 hover:text-white p-1 rounded transition"
+                        className="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white p-1.5 rounded-lg transition-colors border border-emerald-500/30 hover:border-transparent shadow-sm"
                         title="Birikim Ekle (+)"
                       >
-                        <Plus size={14} />
+                        <Plus size={16} />
                       </button>
                     </div>
-                    <p className="text-lg font-bold text-green-400">₺{goal.current_amount.toLocaleString()}</p>
+                    <p className="text-xl font-bold font-display text-emerald-400 tracking-tight">₺{goal.current_amount.toLocaleString()}</p>
                   </div>
-                  <div className="bg-gray-900 p-3 rounded-xl flex flex-col justify-between">
-                    <p className="text-xs text-gray-500 mb-1">Kalan</p>
-                    <p className="text-lg font-bold text-orange-400">₺{Math.max(0, remaining).toLocaleString()}</p>
+                  <div className="bg-[#0F172A]/50 p-4 rounded-2xl flex flex-col justify-between border border-slate-700/30 shadow-inner">
+                    <p className="text-xs text-slate-400 mb-2 font-medium uppercase tracking-widest">Kalan</p>
+                    <p className="text-xl font-bold font-display text-amber-400 tracking-tight">₺{Math.max(0, remaining).toLocaleString()}</p>
                   </div>
                 </div>
 
                 {/* Footer info */}
-                <div className="flex items-center justify-between text-xs text-gray-500 border-t border-gray-700 pt-3">
+                <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-widest text-slate-500 border-t border-slate-700/50 pt-4 mt-2">
                   <span>Hedef: ₺{goal.target_amount.toLocaleString()}</span>
-                  {goal.target_date && (
-                    <span className="flex items-center gap-1">
-                      <Calendar size={12} /> {new Date(goal.target_date).toLocaleDateString('tr-TR')}
-                    </span>
-                  )}
-                  {monthlySalary > 0 && remaining > 0 && (
-                    <span className="text-purple-400">~{monthsLeft} ay kaldı</span>
-                  )}
+                  <div className="flex gap-4">
+                    {goal.target_date && (
+                      <span className="flex items-center gap-1">
+                        <Calendar size={12} className="text-slate-400" /> {new Date(goal.target_date).toLocaleDateString('tr-TR')}
+                      </span>
+                    )}
+                    {monthlySalary > 0 && remaining > 0 && (
+                      <span className="text-indigo-400">~{monthsLeft} AY KALDI</span>
+                    )}
+                  </div>
                 </div>
               </div>
             );
@@ -289,62 +307,71 @@ export default function Goals() {
       )}
 
       {/* Motivational Info */}
-      <div className="bg-gray-800 border border-gray-700 rounded-2xl p-6">
-        <h3 className="text-lg font-bold text-white mb-3">💡 Nasıl Çalışır?</h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-          <div className="bg-gray-900 p-4 rounded-xl">
-            <p className="text-purple-400 font-bold mb-2">1. Hedef Belirle</p>
-            <p className="text-gray-400">Araba, tatil, ev veya acil durum fonu gibi bir hedef oluştur ve hedef tutarını gir.</p>
+      <div className="bg-[#1E293B]/80 backdrop-blur-md border border-slate-700/50 rounded-[32px] p-8 shadow-glass relative z-10 animate-slide-up" style={{ animationDelay: '200ms' }}>
+        <h3 className="text-2xl font-bold font-display text-white mb-6 flex items-center gap-3">
+          <span className="text-amber-400 text-3xl">💡</span> Nasıl Çalışır?
+        </h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+          <div className="bg-[#0F172A]/50 p-6 rounded-2xl border border-slate-700/30 shadow-inner group hover:-translate-y-1 transition-transform">
+            <p className="text-indigo-400 font-bold mb-3 flex items-center gap-2 text-base">
+              <span className="bg-indigo-500/20 text-indigo-300 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">1</span> Hedef Belirle
+            </p>
+            <p className="text-slate-400 font-medium leading-relaxed">Araba, tatil, ev veya acil durum fonu gibi bir hedef oluştur ve hedef tutarını gir.</p>
           </div>
-          <div className="bg-gray-900 p-4 rounded-xl">
-            <p className="text-purple-400 font-bold mb-2">2. Birikimlerini Takip Et</p>
-            <p className="text-gray-400">Biriktirdiğin tutarı güncelle. AI asistan seni motive etmek için Nudge mesajları gönderir.</p>
+          <div className="bg-[#0F172A]/50 p-6 rounded-2xl border border-slate-700/30 shadow-inner group hover:-translate-y-1 transition-transform">
+            <p className="text-purple-400 font-bold mb-3 flex items-center gap-2 text-base">
+              <span className="bg-purple-500/20 text-purple-300 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">2</span> Birikimlerini Takip Et
+            </p>
+            <p className="text-slate-400 font-medium leading-relaxed">Biriktirdiğin tutarı güncelle. AI asistan seni motive etmek için Nudge mesajları gönderir.</p>
           </div>
-          <div className="bg-gray-900 p-4 rounded-xl">
-            <p className="text-purple-400 font-bold mb-2">3. Hedefe Ulaş 🎉</p>
-            <p className="text-gray-400">Her checkout'ta sistemimiz hedefine olan etkiyi gösterir ve gereksiz harcamalardan korur.</p>
+          <div className="bg-[#0F172A]/50 p-6 rounded-2xl border border-slate-700/30 shadow-inner group hover:-translate-y-1 transition-transform">
+            <p className="text-emerald-400 font-bold mb-3 flex items-center gap-2 text-base">
+              <span className="bg-emerald-500/20 text-emerald-300 w-6 h-6 rounded-full flex items-center justify-center text-xs font-black">3</span> Hedefe Ulaş
+            </p>
+            <p className="text-slate-400 font-medium leading-relaxed">Her checkout'ta sistemimiz hedefine olan etkiyi gösterir ve gereksiz harcamalardan korur.</p>
           </div>
         </div>
       </div>
 
       {/* Add Goal Modal */}
       {showAdd && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-white">🎯 Yeni Hedef Oluştur</h3>
-              <button onClick={() => setShowAdd(false)} className="text-gray-500 hover:text-white transition">
-                <X size={24} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F172A]/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-[#1E293B]/95 border border-slate-700/50 rounded-[32px] w-full max-w-md overflow-hidden shadow-glass animate-scale-in">
+            <div className="p-8 border-b border-slate-700/50 flex justify-between items-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
+              <h3 className="text-2xl font-bold font-display text-white relative z-10 flex items-center gap-2">🎯 Yeni Hedef Oluştur</h3>
+              <button onClick={() => setShowAdd(false)} className="text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700 p-2 rounded-full transition-colors relative z-10 border border-slate-600/30">
+                <X size={20} />
               </button>
             </div>
-            <div className="p-6 space-y-5">
+            <div className="p-8 space-y-6">
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Hedef Adı</label>
+                <label className="block text-slate-300 text-sm font-bold mb-2 uppercase tracking-wide">Hedef Adı</label>
                 <input
                   type="text"
                   value={addData.title}
                   onChange={e => setAddData({...addData, title: e.target.value})}
                   placeholder="Örn: Kırmızı BMW M3, Bodrum Tatili"
-                  className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                  className="w-full bg-[#0F172A] border border-slate-600/50 text-white px-4 py-3.5 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-medium shadow-inner transition-all hover:border-slate-500"
                 />
               </div>
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Hedef Tutarı (₺)</label>
+                <label className="block text-slate-300 text-sm font-bold mb-2 uppercase tracking-wide">Hedef Tutarı (₺)</label>
                 <input
                   type="number"
                   value={addData.target_amount}
                   onChange={e => setAddData({...addData, target_amount: e.target.value})}
                   placeholder="200000"
-                  className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                  className="w-full bg-[#0F172A] border border-slate-600/50 text-white px-4 py-3.5 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-medium shadow-inner transition-all hover:border-slate-500 font-display text-xl"
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">Kategori</label>
+                  <label className="block text-slate-300 text-sm font-bold mb-2 uppercase tracking-wide">Kategori</label>
                   <select
                     value={addData.category}
                     onChange={e => setAddData({...addData, category: e.target.value})}
-                    className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                    className="w-full bg-[#0F172A] border border-slate-600/50 text-white px-4 py-3.5 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-medium shadow-inner transition-all hover:border-slate-500 appearance-none"
                   >
                     <option value="car">🚗 Araba</option>
                     <option value="vacation">✈️ Tatil</option>
@@ -355,19 +382,19 @@ export default function Goals() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-gray-300 text-sm font-medium mb-2">Hedef Tarihi</label>
+                  <label className="block text-slate-300 text-sm font-bold mb-2 uppercase tracking-wide">Hedef Tarihi</label>
                   <input
                     type="date"
                     value={addData.target_date}
                     onChange={e => setAddData({...addData, target_date: e.target.value})}
-                    className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                    className="w-full bg-[#0F172A] border border-slate-600/50 text-white px-4 py-3.5 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none font-medium shadow-inner transition-all hover:border-slate-500"
                   />
                 </div>
               </div>
               <button
                 onClick={handleCreate}
                 disabled={saving || !addData.title || !addData.target_amount}
-                className="w-full py-4 bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white rounded-xl font-bold text-lg transition shadow-lg shadow-purple-500/20"
+                className="w-full py-4.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500 text-white rounded-2xl font-bold text-lg transition-all duration-300 shadow-glow-purple disabled:shadow-none hover:scale-[1.02] active:scale-95 cursor-pointer mt-4"
               >
                 {saving ? 'Oluşturuluyor...' : 'Hedefi Oluştur'}
               </button>
@@ -378,41 +405,42 @@ export default function Goals() {
 
       {/* Edit Goal Modal (Update savings) */}
       {editGoal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-white">💰 Birikimi Güncelle</h3>
-              <button onClick={() => setEditGoal(null)} className="text-gray-500 hover:text-white transition">
-                <X size={24} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F172A]/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-[#1E293B]/95 border border-slate-700/50 rounded-[32px] w-full max-w-md overflow-hidden shadow-glass animate-scale-in">
+            <div className="p-8 border-b border-slate-700/50 flex justify-between items-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 pointer-events-none"></div>
+              <h3 className="text-2xl font-bold font-display text-white relative z-10 flex items-center gap-2">💰 Birikimi Güncelle</h3>
+              <button onClick={() => setEditGoal(null)} className="text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700 p-2 rounded-full transition-colors relative z-10 border border-slate-600/30">
+                <X size={20} />
               </button>
             </div>
-            <div className="p-6 space-y-5">
-              <div className="bg-gray-800 p-4 rounded-xl">
-                <p className="text-sm text-gray-400 mb-1">Hedef: {editGoal.title}</p>
-                <p className="text-lg text-white font-bold">₺{editGoal.target_amount.toLocaleString()}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+            <div className="p-8 space-y-6">
+              <div className="bg-[#0F172A]/50 p-5 rounded-2xl border border-slate-700/30 shadow-inner">
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Hedef: {editGoal.title}</p>
+                <p className="text-3xl text-white font-black font-display tracking-tight">₺{editGoal.target_amount.toLocaleString()}</p>
+                <div className="w-full bg-[#1E293B] rounded-full h-2 mt-4 shadow-inner border border-slate-700/50 overflow-hidden">
                   <div
-                    className="bg-purple-500 h-2 rounded-full"
+                    className="bg-gradient-to-r from-indigo-500 to-purple-500 h-2 rounded-full"
                     style={{ width: `${Math.min(editGoal.progress_percent, 100)}%` }}
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Şu anki birikim tutarı (₺)</label>
+                <label className="block text-slate-300 text-sm font-bold mb-3 uppercase tracking-wide">Şu anki birikim tutarı (₺)</label>
                 <input
                   type="number"
                   value={editAmount}
                   onChange={e => setEditAmount(e.target.value)}
-                  className="w-full bg-gray-800 border border-gray-700 text-white text-2xl font-bold px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                  className="w-full bg-[#0F172A] border border-slate-600/50 text-white text-3xl font-black font-display tracking-tight px-5 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none shadow-inner transition-all hover:border-slate-500"
                   autoFocus
                 />
               </div>
               <button
                 onClick={handleUpdate}
                 disabled={saving}
-                className="w-full py-4 bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white rounded-xl font-bold text-lg transition flex justify-center items-center gap-2"
+                className="w-full py-4.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500 text-white rounded-2xl font-bold text-lg transition-all duration-300 flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] disabled:shadow-none hover:-translate-y-1 active:scale-95 mt-4"
               >
-                {saving ? 'Kaydediliyor...' : <><Check size={20} /> Güncelle</>}
+                {saving ? 'Kaydediliyor...' : <><Check size={22} /> Güncelle</>}
               </button>
             </div>
           </div>
@@ -421,34 +449,38 @@ export default function Goals() {
 
       {/* Quick Add Modal (+ Birikim Ekle) */}
       {quickAddGoal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in">
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl w-full max-w-md overflow-hidden shadow-2xl">
-            <div className="p-6 border-b border-gray-700 flex justify-between items-center">
-              <h3 className="text-xl font-bold text-white">➕ Birikim Ekle</h3>
-              <button onClick={() => setQuickAddGoal(null)} className="text-gray-500 hover:text-white transition">
-                <X size={24} />
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0F172A]/80 backdrop-blur-md animate-fade-in">
+          <div className="bg-[#1E293B]/95 border border-slate-700/50 rounded-[32px] w-full max-w-md overflow-hidden shadow-glass animate-scale-in">
+            <div className="p-8 border-b border-slate-700/50 flex justify-between items-center relative overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-teal-500/10 pointer-events-none"></div>
+              <h3 className="text-2xl font-bold font-display text-white relative z-10 flex items-center gap-2">➕ Birikim Ekle</h3>
+              <button onClick={() => setQuickAddGoal(null)} className="text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-700 p-2 rounded-full transition-colors relative z-10 border border-slate-600/30">
+                <X size={20} />
               </button>
             </div>
-            <div className="p-6 space-y-5">
-              <div className="bg-gray-800 p-4 rounded-xl">
-                <p className="text-sm text-gray-400 mb-1">Hedef: {quickAddGoal.title}</p>
-                <p className="text-lg text-white font-bold">₺{quickAddGoal.current_amount.toLocaleString()} / ₺{quickAddGoal.target_amount.toLocaleString()}</p>
-                <div className="w-full bg-gray-700 rounded-full h-2 mt-2">
+            <div className="p-8 space-y-6">
+              <div className="bg-[#0F172A]/50 p-5 rounded-2xl border border-slate-700/30 shadow-inner">
+                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mb-1">Hedef: {quickAddGoal.title}</p>
+                <div className="flex items-baseline gap-2">
+                  <p className="text-2xl text-emerald-400 font-black font-display tracking-tight">₺{quickAddGoal.current_amount.toLocaleString()}</p>
+                  <p className="text-sm text-slate-500 font-bold">/ ₺{quickAddGoal.target_amount.toLocaleString()}</p>
+                </div>
+                <div className="w-full bg-[#1E293B] rounded-full h-2 mt-4 shadow-inner border border-slate-700/50 overflow-hidden">
                   <div
-                    className="bg-purple-500 h-2 rounded-full"
+                    className="bg-gradient-to-r from-emerald-500 to-teal-500 h-2 rounded-full"
                     style={{ width: `${Math.min(quickAddGoal.progress_percent, 100)}%` }}
                   />
                 </div>
               </div>
               
               <div>
-                <label className="block text-gray-300 text-sm font-medium mb-2">Eklenecek Birikim Tutarı (₺)</label>
+                <label className="block text-slate-300 text-sm font-bold mb-3 uppercase tracking-wide">Eklenecek Birikim Tutarı (₺)</label>
                 <input
                   type="number"
                   value={quickAddAmount}
                   onChange={e => setQuickAddAmount(e.target.value)}
                   placeholder="Miktar girin (örn: 1000)"
-                  className="w-full bg-gray-800 border border-gray-700 text-white text-2xl font-bold px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
+                  className="w-full bg-[#0F172A] border border-slate-600/50 text-white text-3xl font-black font-display tracking-tight px-5 py-4 rounded-2xl focus:ring-2 focus:ring-emerald-500 outline-none shadow-inner transition-all hover:border-slate-500"
                   autoFocus
                 />
               </div>
@@ -460,7 +492,7 @@ export default function Goals() {
                     const remaining = quickAddGoal.target_amount - quickAddGoal.current_amount;
                     setQuickAddAmount(String(remaining));
                   }}
-                  className="w-full py-2 bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 rounded-xl font-bold text-sm transition"
+                  className="w-full py-3 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 rounded-xl font-bold text-sm transition-colors uppercase tracking-wider"
                 >
                   🎯 Hedefi Doğrudan Tamamla (+₺{(quickAddGoal.target_amount - quickAddGoal.current_amount).toLocaleString()})
                 </button>
@@ -469,9 +501,9 @@ export default function Goals() {
               <button
                 onClick={() => handleQuickAdd()}
                 disabled={saving || !quickAddAmount}
-                className="w-full py-4 bg-green-600 hover:bg-green-500 disabled:opacity-50 text-white rounded-xl font-bold text-lg transition flex justify-center items-center gap-2"
+                className="w-full py-4.5 bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-400 hover:to-emerald-500 disabled:from-slate-700 disabled:to-slate-700 disabled:text-slate-500 text-white rounded-2xl font-bold text-lg transition-all duration-300 flex justify-center items-center gap-2 shadow-[0_0_20px_rgba(16,185,129,0.3)] disabled:shadow-none hover:-translate-y-1 active:scale-95 mt-4"
               >
-                {saving ? 'Ekleniyor...' : <><Check size={20} /> Birikim Ekle</>}
+                {saving ? 'Ekleniyor...' : <><Check size={22} /> Birikimi Ekle</>}
               </button>
             </div>
           </div>

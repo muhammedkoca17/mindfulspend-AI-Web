@@ -100,7 +100,7 @@ def add_manual_transactions(
     discretionary_amount = 0.0
 
     for item in batch.items:
-        main_cat, sub_cat, is_essential = detect_category(item.item_name)
+        main_cat, sub_cat, is_essential = detect_category(item.item_name, db)
 
         tx = Transaction(
             user_id=user.id,

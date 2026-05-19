@@ -35,7 +35,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 # ─── Configuration ────────────────────────────────────────────
 TEST_EMAIL = "test.jury@mindfulspend.ai"
-TEST_PASSWORD = "12345678"
+TEST_PASSWORD = "JuryTest123!"
 TEST_NAME = "Jury Test Kullanıcısı"
 SALARY = 45_000.0  # ₺45,000/month
 

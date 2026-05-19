@@ -25,9 +25,24 @@ Projenin temelini oluşturan ve Kaggle ile yerel kaynaklardan derlenen ham veri 
 2. **`online_retail_II.csv` (Kaggle Online Perakende Verisi):** 
    - **Satır Sayısı:** 1.067.371 satır (Sıkıştırılmamış ham veri)
    - **Özellikler:** İngiltere merkezli gerçek perakende sepet verileri. GBP cinsinden olan fiyatlar, temizlik aşamasında `40.0` çarpanıyla güncel TRY değerine dönüştürülmüştür.
-3. **`product_catalog_updated_2026.xlsx` (2026 Enflasyon Ayarlı Ürün Kataloğu):** 
-   - **Benzersiz Ürün Sayısı:** 9.367 ürün (Eski `market_sales.xlsx` sepet verilerinden süzülmüştür).
-   - **Özellikler:** 12 ana kategori, 63 alt kategori, 155 detay kategori ve 354 markadan oluşan, 2017 market verilerinin kümülatif **12.44x** enflasyon çarpanıyla güncellenmesiyle oluşturulmuş sanal market katalog veritabanı.
+3. **`product_catalog_updated_2026.xlsx` (1M Rows Turkish Market Sales & 2026 Enflasyon Kataloğu):** 
+   - **Veri Kaynağı:** Orijinal **"1M rows Turkish Market Sales Dataset"** (611.108 işlem kaydı, 9.367 benzersiz ürün, 49.316 müşteri, 81 şube, 354 farklı marka).
+   - **Enflasyon Çarpanı:** Ocak 2017 - Şubat 2026 arasındaki kümülatif **12.44x** enflasyon oranı kullanılarak `PRICE` sütunu güncellenip `PRICE_2026` hesaplanmıştır.
+   - **Sütun Yapısı ve Analitik Değişkenler:**
+     * `ITEMCODE` ➔ Benzersiz ürün kodu (Örn: 6).
+     * `ITEMNAME` ➔ Temizlenmiş ürün adı (Örn: "FLORMAR OJE").
+     * `PRICE` ➔ Orijinal 2017 medyan satış fiyatı.
+     * `PRICE_2026` ➔ Güncel enflasyon uyarlamalı 2026 medyan satış fiyatı.
+     * `BRAND` ➔ Ürün markası (Örn: "Flormar").
+     * `CATEGORY_NAME1` ➔ Ana Kategori (12 benzersiz sınıf: Gıda, Kozmetik, Deterjan vb.).
+     * `CATEGORY_NAME2` ➔ Alt Kategori (63 benzersiz sınıf: Makyaj Malzemeleri, Süt Ürünleri vb.).
+     * `CATEGORY_NAME3` ➔ Detay Kategori (155 benzersiz sınıf: Manikür Pedikür vb.).
+     * `total_sold` ➔ Ürünün veri setindeki toplam satış miktarı (Popülerlik ölçütü).
+     * `price_tier_global_2026` ➔ Global bütçe seviyesi (ucuz, uygun, pahalı, çok_pahalı).
+     * `price_tier_category_2026` ➔ Kategori içi göreceli fiyat seviyesi (ucuz, uygun, pahalı, çok_pahalı).
+     * `necessity_auto` ➔ Davranışsal finans kurallarına göre otomatik gereklilik tahmini (tam_gerekli, gerekli_degil).
+     * `necessity_final` ➔ Gemini AI ve kural tabanlı doğrulama sonrası nihai gereklilik sınıfı (`temel_ihtiyac` veya `tam_gerekli_deyil`).
+     * `popularity` ➔ Popülerlik düzeyi (nadir, orta, popüler).
 
 ### B. Profil ve Kart Veri Setleri
 4. **`cards_data.csv`:** 6.146 adet simüle edilmiş kredi/banka kartı profili (kart markası, kart tipi, kredi limiti, açılış tarihi, dark web sızıntı durumu).

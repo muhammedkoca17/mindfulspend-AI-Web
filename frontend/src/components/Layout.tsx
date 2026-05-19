@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Store, ShoppingCart, User as UserIcon, LogOut, Bell, X, Target, Activity } from 'lucide-react';
+import { LayoutDashboard, Store, ShoppingCart, User as UserIcon, LogOut, Bell, X, Target, Activity, ArrowRight } from 'lucide-react';
 import { getFixedExpenses, sendChatMessage } from '../services/api';
 
 export default function Layout() {
@@ -98,15 +98,15 @@ export default function Layout() {
   };
 
   return (
-    <div className="flex h-screen bg-gray-900 text-white overflow-hidden">
+    <div className="flex h-screen bg-[#0F172A] text-slate-200 overflow-hidden font-sans">
       {/* Sidebar */}
-      <aside className="w-64 bg-gray-800 border-r border-gray-700 flex flex-col">
-        <div className="p-6">
-          <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-brand-400 bg-clip-text text-transparent">
+      <aside className="w-72 bg-[#1E293B]/60 backdrop-blur-md border-r border-slate-800/80 flex flex-col relative z-20">
+        <div className="p-8 pb-4">
+          <h1 className="text-2xl font-black font-display tracking-tight bg-gradient-to-br from-indigo-400 via-purple-400 to-fuchsia-400 bg-clip-text text-transparent drop-shadow-sm">
             MindfulSpend AI
           </h1>
         </div>
-        <nav className="flex-1 px-4 space-y-2">
+        <nav className="flex-1 px-4 py-4 space-y-1">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = location.pathname === item.path;
@@ -114,25 +114,28 @@ export default function Layout() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+                className={`group flex items-center gap-3 px-4 py-3.5 rounded-xl transition-all duration-300 ease-out relative overflow-hidden ${
                   isActive
-                    ? 'bg-purple-600/20 text-purple-400 font-medium'
-                    : 'text-gray-400 hover:bg-gray-700/50 hover:text-white'
+                    ? 'bg-indigo-500/15 text-indigo-300 font-semibold shadow-inner'
+                    : 'text-slate-400 hover:bg-slate-800/50 hover:text-slate-200'
                 }`}
               >
-                <Icon size={20} />
-                {item.label}
+                {isActive && (
+                  <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500 rounded-r-full shadow-[0_0_12px_rgba(99,102,241,0.8)]" />
+                )}
+                <Icon size={20} className={`transition-transform duration-300 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} />
+                <span className="tracking-wide text-sm">{item.label}</span>
               </Link>
             );
           })}
         </nav>
-        <div className="p-4 border-t border-gray-700">
+        <div className="p-4 border-t border-slate-800/80">
           <button
             onClick={handleLogout}
-            className="flex items-center gap-3 px-4 py-3 w-full text-left text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+            className="flex items-center gap-3 px-4 py-3 w-full text-left text-rose-400 hover:bg-rose-500/10 hover:text-rose-300 rounded-xl transition-all duration-300 font-medium group"
           >
-            <LogOut size={20} />
-            Çıkış Yap
+            <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
+            <span className="tracking-wide text-sm">Çıkış Yap</span>
           </button>
         </div>
       </aside>
@@ -140,29 +143,30 @@ export default function Layout() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden relative">
         {/* Top Header */}
-        <header className="h-16 bg-gray-800/50 border-b border-gray-700 backdrop-blur-sm flex items-center justify-between px-8 z-10">
-          <h2 className="text-xl font-semibold">
+        <header className="h-20 bg-[#0F172A]/80 border-b border-slate-800/80 backdrop-blur-xl flex items-center justify-between px-10 z-10 sticky top-0">
+          <h2 className="text-2xl font-bold font-display text-white tracking-tight">
             {navItems.find((item) => item.path === location.pathname)?.label || 'MindfulSpend'}
           </h2>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-5">
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-medium">{user.full_name}</p>
-              <p className="text-xs text-gray-400 capitalize">{user.risk_profile || 'Bilinmiyor'} Profil</p>
+              <p className="text-sm font-semibold text-white tracking-wide">{user.full_name}</p>
+              <p className="text-[11px] text-indigo-400 uppercase tracking-widest font-bold mt-0.5">{user.risk_profile || 'Bilinmiyor'} Profil</p>
             </div>
-            <div className="w-10 h-10 rounded-full bg-purple-600 flex items-center justify-center font-bold text-lg">
+            <button className="w-11 h-11 rounded-full bg-gradient-to-tr from-indigo-600 to-purple-600 flex items-center justify-center font-bold text-lg text-white shadow-glow-purple hover:scale-105 transition-transform duration-300 cursor-pointer">
               {user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U'}
-            </div>
+            </button>
           </div>
         </header>
 
         {/* Global Notifications Container */}
-        <div className="absolute top-20 right-8 z-50 flex flex-col gap-3">
+        <div className="absolute top-24 right-10 z-50 flex flex-col gap-3">
           {notifications.map(notif => {
             const daysLeft = notif.due_day - new Date().getDate();
             return (
-              <div key={notif.id} className="bg-gray-800 border-l-4 border-orange-500 p-4 rounded-xl shadow-2xl flex items-start gap-4 animate-fade-in w-80">
-                <div className="bg-orange-500/20 p-2 rounded-full text-orange-400 shrink-0">
-                  <Bell size={20} />
+              <div key={notif.id} className="bg-[#1E293B] border border-slate-700/50 p-4 rounded-2xl shadow-glass flex items-start gap-4 animate-slide-right w-80 relative overflow-hidden group">
+                <div className="absolute left-0 top-0 bottom-0 w-1 bg-amber-500 shadow-[0_0_12px_rgba(245,158,11,0.8)]" />
+                <div className="bg-amber-500/20 p-2.5 rounded-full text-amber-400 shrink-0 mt-0.5">
+                  <Bell size={18} className="animate-pulse-soft" />
                 </div>
                 <div className="flex-1">
                   <h4 className="text-sm font-bold text-white mb-1">Yaklaşan Ödeme</h4>
@@ -178,50 +182,56 @@ export default function Layout() {
         </div>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-8 relative">
-          <Outlet />
+        <main className="flex-1 overflow-y-auto p-10 relative">
+          <div className="max-w-7xl mx-auto h-full relative">
+            <Outlet />
+          </div>
           
           {/* Gemini Chat Widget */}
-          <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+          <div className="fixed bottom-8 right-8 z-40 flex flex-col items-end">
             {chatOpen && (
-              <div className="bg-gray-800 border border-gray-700 w-80 md:w-96 h-[480px] rounded-2xl shadow-2xl mb-4 flex flex-col overflow-hidden animate-fade-in">
+              <div className="bg-[#1E293B]/95 backdrop-blur-xl border border-slate-700/80 w-80 md:w-96 h-[500px] rounded-[24px] shadow-[0_12px_40px_rgba(0,0,0,0.5)] mb-5 flex flex-col overflow-hidden animate-slide-up origin-bottom-right">
                 {/* Chat Header */}
-                <div className="p-4 bg-gradient-to-r from-purple-700 to-indigo-700 flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xl">✨</span>
+                <div className="p-4 bg-gradient-to-r from-indigo-600 to-purple-600 flex justify-between items-center relative overflow-hidden">
+                  <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
+                  <div className="flex items-center gap-3 relative z-10">
+                    <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm shadow-inner">
+                      <span className="text-xl">✨</span>
+                    </div>
                     <div>
-                      <h4 className="text-sm font-bold text-white leading-tight">MindfulSpend AI Asistanı</h4>
-                      <span className="text-[10px] text-green-300 font-semibold flex items-center gap-1">
-                        <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse"></span>
+                      <h4 className="text-sm font-bold text-white tracking-wide">MindfulSpend Asistanı</h4>
+                      <span className="text-[11px] text-emerald-300 font-semibold flex items-center gap-1.5 uppercase tracking-wider mt-0.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse-soft shadow-[0_0_8px_rgba(52,211,153,0.8)]"></span>
                         Aktif / Hazır
                       </span>
                     </div>
                   </div>
-                  <button onClick={() => setChatOpen(false)} className="text-gray-300 hover:text-white transition">
-                    <X size={18} />
+                  <button onClick={() => setChatOpen(false)} className="text-white/70 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all relative z-10">
+                    <X size={20} />
                   </button>
                 </div>
 
                 {/* Chat Messages */}
-                <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-900/40">
-                  {chatMessages.map((msg, index) => (
-                    <div key={index} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm ${
+                <div className="flex-1 overflow-y-auto p-5 space-y-4 scroll-smooth">
+                  {chatMessages.map((msg, i) => (
+                    <div key={i} className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'} animate-fade-in`}>
+                      <div className={`max-w-[85%] rounded-2xl px-4 py-3 shadow-sm ${
                         msg.sender === 'user' 
-                          ? 'bg-purple-600 text-white rounded-br-none' 
-                          : 'bg-gray-800 text-gray-200 border border-gray-700 rounded-bl-none'
+                          ? 'bg-indigo-600 text-white rounded-tr-sm' 
+                          : 'bg-slate-700/50 text-slate-200 rounded-tl-sm border border-slate-600/30'
                       }`}>
-                        {msg.text}
+                        <p className="text-[13px] leading-relaxed">{msg.text}</p>
                       </div>
                     </div>
                   ))}
                   {chatLoading && (
-                    <div className="flex justify-start">
-                      <div className="bg-gray-800 text-gray-400 border border-gray-700 rounded-2xl rounded-bl-none px-4 py-2.5 text-xs flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                        <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                        <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                        AI düşünüyor...
+                    <div className="flex justify-start animate-fade-in">
+                      <div className="bg-slate-700/50 text-slate-400 rounded-2xl rounded-tl-sm px-5 py-4 border border-slate-600/30">
+                        <div className="flex gap-1.5">
+                          <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+                          <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+                          <div className="w-1.5 h-1.5 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+                        </div>
                       </div>
                     </div>
                   )}

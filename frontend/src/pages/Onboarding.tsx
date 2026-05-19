@@ -270,7 +270,12 @@ export default function Onboarding() {
                           type="text"
                           value={goalTitle}
                           onChange={e => setGoalTitle(e.target.value)}
-                          placeholder={selectedGoalCat === 'car' ? 'Örn: Kırmızı BMW M3' : 'Örn: Antalya Tatili'}
+                          placeholder={
+                            selectedGoalCat === 'car' ? 'Örn: Kırmızı BMW M3' :
+                            selectedGoalCat === 'vacation' ? 'Örn: Antalya Tatili' :
+                            selectedGoalCat === 'home' ? 'Örn: Deniz Manzaralı Ev' :
+                            'Örn: Acil Durum Fonu'
+                          }
                           className="w-full bg-gray-800 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-purple-500 outline-none"
                         />
                       </div>

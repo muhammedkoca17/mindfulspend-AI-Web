@@ -16,142 +16,77 @@ import os
 # Main category hierarchy
 # ---------------------------------------------------------------------------
 CATEGORY_HIERARCHY: dict[str, dict] = {
-    "market_temel_ihtiyac": {
-        "label": "Market - Temel Ihtiyac",
+    "GIDA": {
+        "label": "Gıda & Temel Gıda",
+        "icon": "🍞",
+        "is_essential": True,
+        "sub_categories": {}
+    },
+    "MEYVE SEBZE": {
+        "label": "Meyve & Sebze",
         "icon": "🥬",
         "is_essential": True,
-        "sub_categories": {
-            "meyve_sebze": [
-                "elma", "muz", "portakal", "domates", "salatalik", "patates",
-                "sogan", "biber", "havuc", "pirasa", "ispanak", "marul",
-                "limon", "mandalina", "nar", "uzum", "cilek", "karpuz",
-                "kavun", "armut", "seftali", "kayisi", "erik", "visne",
-                "kabak", "patlican", "fasulye", "bezelye", "brokoli",
-                "karnabahar", "lahana", "turp", "kere", "dereotu",
-                "maydanoz", "nane", "roka",
-            ],
-            "sut_urunleri": [
-                "sut", "yogurt", "peynir", "tereyagi", "kaymak", "ayran",
-                "kefir", "lor", "tulum", "kasar",
-            ],
-            "ekmek_tahil": [
-                "ekmek", "pirinc", "makarna", "bulgur", "un", "nohut",
-                "mercimek", "fasulye", "barbunya", "irmik",
-            ],
-            "et_balik": [
-                "tavuk", "dana kiyma", "kuzu", "balik", "kofte", "sucuk",
-                "salam", "sosis", "pastirma", "fume",
-            ],
-            "yumurta": ["yumurta"],
-            "yag": ["zeytinyagi", "aycicek yagi", "sivi yag", "margarin"],
-        },
+        "sub_categories": {}
     },
-    "market_atistirmalik": {
-        "label": "Market - Atistirmalik",
-        "icon": "🍫",
-        "is_essential": False,
-        "sub_categories": {
-            "cikolata_seker": [
-                "cikolata", "seker", "lokum", "helva", "gofret", "dondurma",
-                "bonbon", "draje",
-            ],
-            "cips_kraker": ["cips", "kraker", "biskuvi", "kek", "pasta", "kurabiye"],
-            "icecek": [
-                "kola", "gazoz", "meyve suyu", "enerji icecegi", "soda",
-                "ice tea", "limonata",
-            ],
-        },
-    },
-    "temizlik": {
-        "label": "Temizlik Malzemeleri",
-        "icon": "🧴",
+    "SÜT KAHVALTILIK": {
+        "label": "Süt & Kahvaltılık",
+        "icon": "🧀",
         "is_essential": True,
-        "sub_categories": {
-            "camasir": ["deterjan", "yumusatici", "camasir suyu", "leke cikarici"],
-            "bulasik": ["bulasik deterjani", "bulasik tableti"],
-            "ev_temizlik": [
-                "yuzey temizleyici", "cam sil", "cop poseti", "tuvalet kagidi",
-                "kagit havlu", "pecete",
-            ],
-        },
+        "sub_categories": {}
     },
-    "kisisel_bakim": {
-        "label": "Kisisel Bakim",
+    "ET TAVUK": {
+        "label": "Et & Tavuk",
+        "icon": "🍗",
+        "is_essential": True,
+        "sub_categories": {}
+    },
+    "BEBEK": {
+        "label": "Bebek Ürünleri",
+        "icon": "👶",
+        "is_essential": True,
+        "sub_categories": {}
+    },
+    "DETERJAN TEMİZLİK": {
+        "label": "Deterjan & Temizlik",
         "icon": "🧼",
         "is_essential": True,
-        "sub_categories": {
-            "hijyen": ["sampuan", "dus jeli", "dis macunu", "sabun", "deodorant"],
-            "kozmetik": ["krem", "makyaj", "parfum", "oje"],
-        },
+        "sub_categories": {}
     },
-    "yemek_disari": {
-        "label": "Disarida Yemek",
-        "icon": "🍽️",
-        "is_essential": False,
-        "sub_categories": {
-            "restoran": ["restoran", "lokanta"],
-            "fast_food": ["mcdonalds", "burger king", "dominos", "pizza"],
-            "kafe": ["kahve", "starbucks", "cay"],
-            "siparis": ["yemeksepeti", "getir yemek", "trendyol yemek"],
-        },
-    },
-    "eglence": {
-        "label": "Eglence",
-        "icon": "🎭",
-        "is_essential": False,
-        "sub_categories": {
-            "sinema_tiyatro": ["sinema", "tiyatro", "konser"],
-            "gece_hayati": ["bar", "kulup", "alkol", "bira", "raki", "sarap"],
-            "oyun": ["steam", "playstation", "xbox", "mobil oyun"],
-        },
-    },
-    "saglik": {
-        "label": "Saglik",
-        "icon": "💊",
+    "KAĞIT": {
+        "label": "Kağıt Ürünleri",
+        "icon": "🧻",
         "is_essential": True,
-        "sub_categories": {
-            "ilac": ["eczane", "vitamin", "ilac"],
-            "doktor": ["muayene", "tahlil", "dis hekimi", "goz doktoru"],
-            "spor": ["spor salonu", "pilates", "yuzme"],
-        },
+        "sub_categories": {}
     },
-    "giyim": {
-        "label": "Giyim",
-        "icon": "👕",
+    "KOZMETİK": {
+        "label": "Kozmetik & Kişisel Bakım",
+        "icon": "💄",
         "is_essential": False,
-        "sub_categories": {
-            "temel_giyim": ["ic camasiri", "corap", "tisort", "pantolon"],
-            "dis_giyim": ["mont", "ceket", "kazak", "elbise"],
-            "ayakkabi": ["ayakkabi", "bot", "terlik", "spor ayakkabi"],
-        },
+        "sub_categories": {}
     },
-    "egitim": {
-        "label": "Egitim",
-        "icon": "📚",
-        "is_essential": True,
-        "sub_categories": {
-            "kitap": ["kitap", "dergi", "e-kitap"],
-            "kurs": ["online kurs", "udemy", "coursera", "dil kursu"],
-            "okul": ["okul taksidi", "kirtasiye", "defter", "kalem"],
-        },
+    "İÇECEK": {
+        "label": "İçecekler",
+        "icon": "🥤",
+        "is_essential": False,
+        "sub_categories": {}
     },
-    "sigara": {
-        "label": "Sigara & Tutun",
+    "SİGARA": {
+        "label": "Sigara & Tütün",
         "icon": "🚬",
         "is_essential": False,
-        "sub_categories": {
-            "sigara": ["sigara", "tutun", "puro"],
-        },
+        "sub_categories": {}
     },
-    "diger": {
-        "label": "Diger Harcamalar",
-        "icon": "📦",
+    "EV": {
+        "label": "Ev Gereçleri & Yaşam",
+        "icon": "🏠",
         "is_essential": False,
-        "sub_categories": {
-            "ev_gerecleri": ["mutfak", "elektronik", "ev tekstil", "terlik"],
-            "evcil_hayvan": ["mamalari", "mama"],
-            "diger": ["diger"],
-        },
+        "sub_categories": {}
+    },
+    "PET": {
+        "label": "Evcil Hayvan (Pet)",
+        "icon": "🐱",
+        "is_essential": False,
+        "sub_categories": {}
     },
 }
 
@@ -175,60 +110,31 @@ SUBSCRIPTION_PRICES_TRY: dict[str, float] = {
 
 # MCC code dictionary (Papel.com.tr + ISO 18245)
 CATEGORIES_MCC_MAP: dict[str, dict] = {
-    "5411": {"category": "market_temel_ihtiyac", "label": "Supermarket / Gida"},
+    "5411": {"category": "GIDA", "label": "Supermarket / Gida"},
     "5812": {"category": "yemek_disari", "label": "Restoran"},
     "5814": {"category": "yemek_disari", "label": "Fast Food"},
     "5912": {"category": "saglik", "label": "Eczane"},
     "5691": {"category": "giyim", "label": "Giyim Magazasi"},
-    "5732": {"category": "diger", "label": "Elektronik"},
-    "5977": {"category": "kisisel_bakim", "label": "Kozmetik"},
+    "5732": {"category": "EV", "label": "Elektronik"},
+    "5977": {"category": "KOZMETİK", "label": "Kozmetik"},
     "5983": {"category": "ulasim", "label": "Akaryakit"},
     "4121": {"category": "ulasim", "label": "Taksi"},
     "4814": {"category": "fatura", "label": "Telekomunikasyon"},
     "4900": {"category": "fatura", "label": "Kamu Hizmetleri"},
     "7832": {"category": "eglence", "label": "Sinema"},
     "8062": {"category": "saglik", "label": "Hastane"},
-    "5712": {"category": "diger", "label": "Mobilya"},
-    "6011": {"category": "diger", "label": "ATM"},
+    "5712": {"category": "EV", "label": "Mobilya"},
+    "6011": {"category": "EV", "label": "ATM"},
 }
 
 # Discretionary (impulse-risk high) categories
 DISCRETIONARY_CATEGORIES: set[str] = {
-    "market_atistirmalik",
-    "eglence",
-    "yemek_disari",
-    "giyim",
-    "abonelik",
-    "sigara",
-    "diger",
+    "İÇECEK",
+    "SİGARA",
+    "EV",
+    "PET",
+    "KOZMETİK",
 }
-
-# ---------------------------------------------------------------------------
-# Turkish Market Sales dataset product->category lookup (lazy-loaded)
-# ---------------------------------------------------------------------------
-_PRODUCT_MAP: dict[str, str] = {}
-
-
-def _load_product_map() -> None:
-    """Lazy-load the product-category map extracted from market_sales.xlsx."""
-    global _PRODUCT_MAP
-    if _PRODUCT_MAP:
-        return
-    map_path = os.path.join(
-        os.path.dirname(__file__), "..", "..", "data", "01_raw", "lookups", "product_category_map.json"
-    )
-    if os.path.exists(map_path):
-        with open(map_path, encoding="utf-8") as f:
-            _PRODUCT_MAP = json.load(f)
-
-
-# ---------------------------------------------------------------------------
-# Turkish chars normalization for matching
-# ---------------------------------------------------------------------------
-_TR_CHAR_MAP = str.maketrans(
-    "cCgGiIoOsSuU",
-    "cCgGiIoOsSuU",
-)
 
 
 def _normalize_turkish(text: str) -> str:
@@ -236,60 +142,44 @@ def _normalize_turkish(text: str) -> str:
     return text.lower().strip()
 
 
-# ---------------------------------------------------------------------------
-# Public API
-# ---------------------------------------------------------------------------
-def detect_category(item_name: str) -> tuple[str, str, bool]:
+def detect_category(item_name: str, db: Session | None = None) -> tuple[str, str, bool]:
     """Auto-detect category and sub_category from item name.
 
     Returns (main_category, sub_category, is_essential).
-    Falls back to ("diger", "diger", False) if not found.
-
-    Strategy:
-    1. Exact/partial match in CATEGORY_HIERARCHY sub_category items
-    2. Lookup in Turkish Market Sales product map
-    3. Fallback to "diger"
+    Falls back to ("EV", "diger", False) if not found.
     """
+    from app.db.models import Product
     item_lower = _normalize_turkish(item_name)
 
-    # 1. Direct match against hierarchy keywords
-    for main_cat, data in CATEGORY_HIERARCHY.items():
-        for sub_cat, items in data["sub_categories"].items():
-            for keyword in items:
-                if keyword in item_lower or item_lower in keyword:
-                    return main_cat, sub_cat, data.get("is_essential", False)
+    # 1. DB Lookup if available
+    if db:
+        prod = db.query(Product).filter(Product.name.ilike(f"%{item_name}%")).first()
+        if prod:
+            return prod.category, prod.sub_category or "diger", prod.is_essential
 
-    # 2. Lookup in Turkish Market Sales product map
-    _load_product_map()
-    if _PRODUCT_MAP:
-        for product_name, dataset_cat in _PRODUCT_MAP.items():
-            if item_lower in product_name.lower() or product_name.lower() in item_lower:
-                # Map dataset category to our hierarchy
-                mapped = _map_dataset_category(dataset_cat)
-                if mapped:
-                    return mapped
-
-    return "diger", "diger", False
-
-
-def _map_dataset_category(dataset_cat: str) -> tuple[str, str, bool] | None:
-    """Map a Turkish Market Sales CATEGORY_NAME1 to our hierarchy."""
-    cat_lower = dataset_cat.lower().strip()
-    mapping = {
-        "gida": ("market_temel_ihtiyac", "genel_gida", True),
-        "meyve sebze": ("market_temel_ihtiyac", "meyve_sebze", True),
-        "sut kahvaltilik": ("market_temel_ihtiyac", "sut_urunleri", True),
-        "et tavuk": ("market_temel_ihtiyac", "et_balik", True),
-        "icecek": ("market_atistirmalik", "icecek", False),
-        "deterjan temizlik": ("temizlik", "ev_temizlik", True),
-        "kagit": ("temizlik", "ev_temizlik", True),
-        "kozmetik": ("kisisel_bakim", "kozmetik", True),
-        "ev": ("diger", "ev_esyasi", False),
-        "bebek": ("market_temel_ihtiyac", "bebek", True),
-        "sigara": ("sigara", "sigara", False),
-        "pet": ("diger", "evcil_hayvan", False),
+    # 2. Fallback keyword mapping
+    keywords_mapping = {
+        "GIDA": ["ekmek", "pirinc", "makarna", "bulgur", "un", "nohut", "mercimek", "fasulye", "seker", "salca", "gida", "cikolata", "biskuvi", "cips", "kraker", "kek"],
+        "MEYVE SEBZE": ["elma", "muz", "portakal", "domates", "salatalik", "patates", "sogan", "biber", "havuc", "meyve", "sebze", "limon"],
+        "SÜT KAHVALTILIK": ["sut", "yogurt", "peynir", "tereyagi", "kaymak", "ayran", "kefir", "lor", "kasar", "zeytin", "yumurta", "bal", "recel"],
+        "ET TAVUK": ["tavuk", "kiyma", "et", "kuzu", "balik", "sucuk", "salam", "sosis", "pastirma"],
+        "BEBEK": ["bebek", "mama", "bez", "islak mendil"],
+        "DETERJAN TEMİZLİK": ["deterjan", "yumusatici", "camasir suyu", "bulasik", "temizleyici", "sabun", "sampuan"],
+        "KAĞIT": ["pecete", "tuvalet kagidi", "kagit havlu"],
+        "KOZMETİK": ["krem", "makyaj", "parfum", "oje", "ruj", "maskara", "kozmetik"],
+        "İÇECEK": ["kola", "gazoz", "su", "soda", "icecek", "cay", "kahve", "meyve suyu"],
+        "SİGARA": ["sigara", "tutun", "puro"],
+        "EV": ["mutfak", "bardak", "tabak", "tava", "lamba", "pil", "ampul", "ev"],
+        "PET": ["pet", "kedi", "kopek", "mama", "kum"]
     }
-    return mapping.get(cat_lower)
+
+    for cat, keywords in keywords_mapping.items():
+        for kw in keywords:
+            if kw in item_lower:
+                is_ess = cat not in DISCRETIONARY_CATEGORIES
+                return cat, "diger", is_ess
+
+    return "EV", "diger", False
 
 
 def is_discretionary(category: str) -> bool:
